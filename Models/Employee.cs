@@ -17,5 +17,6 @@ namespace BangazonAPI.Models
         public string Email { get; set; } // ? means that the variable can be null
         public bool Supervisor { get; set; }
         public int DepartmentId { get; set; }
+        public Department Department { get; set; }
     }
 }
