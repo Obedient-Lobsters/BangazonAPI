@@ -14,12 +14,17 @@ namespace BangazonAPI.Models
         public string ProgramName { get; set; }
         [StringLength(80,
             ErrorMessage ="Too Many Characters")]
-        public string StartDate { get; set; }
-        [StringLength(10,
-            ErrorMessage ="Please Enter A Valid Start Date")]
-        public string EndDate { get; set; }
-        [StringLength(10,
-            ErrorMessage = "Please Enter A Valid End Date")]
+  
+        [Required]
+        [DataType(DataType.Date)]
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        public DateTime StartDate { get; set; }
+
+        [Required]
+        [DataType(DataType.Date)]
+        public DateTime EndDate { get; set; }
+
+        [Required]
         public int MaximumAttendees { get; set; }
     }
 }
