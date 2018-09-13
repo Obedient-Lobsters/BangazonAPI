@@ -14,11 +14,17 @@ namespace BangazonAPI.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime DatePurchased { get; set; }
-        public DateTime DateDecommissioned { get; set; }
+
+		[DataType(DataType.Date)]
+		public DateTime? DateDecommissioned { get; set; }
 
         [Required]
         public bool Working { get; set; }
+
+		[Required]
         public string ModelName { get; set; }
+
+		[Required]
         public string Manufacturer { get; set; }
     }
 }
