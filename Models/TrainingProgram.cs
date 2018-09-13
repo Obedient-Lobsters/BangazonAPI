@@ -16,7 +16,6 @@ namespace BangazonAPI.Models
   
         [Required]
         [DataType(DataType.Date)]
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime StartDate { get; set; }
 
         [Required]
