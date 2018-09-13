@@ -21,13 +21,11 @@ namespace BangazonAPI.Models
 
         [Required]
         public int CustomerId { get; set; }
-        public Customer Customer { get; set; }
 
         [Required]
         public int Quantity { get; set; }
 
         [Required]
         public int ProductTypeId { get; set; }
-        public ProductType ProductType { get; set; }
     }
 }
