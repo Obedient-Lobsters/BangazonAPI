@@ -14,10 +14,14 @@ namespace BangazonAPI.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime DateAssigned { get; set; }
-        public DateTime DateReturned { get; set; }
+
+		[DataType(DataType.Date)]
+        public DateTime? DateReturned { get; set; }
 
         [Required]
         public int EmployeeId { get; set; }
+
+		[Required]
         public int ComputerId { get; set; }
     }
 }
