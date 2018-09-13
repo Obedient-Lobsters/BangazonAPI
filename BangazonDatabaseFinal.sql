@@ -1,3 +1,69 @@
+
+IF (OBJECT_ID('dbo.FK_ComputerEmployee', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.EmployeeComputer DROP CONSTRAINT FK_ComputerEmployee
+END
+
+IF (OBJECT_ID('dbo.FK_EmployeeComp', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.EmployeeComputer DROP CONSTRAINT FK_EmployeeComp
+END
+
+IF (OBJECT_ID('dbo.FK_TrainingProgram', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.EmployeeTraining DROP CONSTRAINT FK_TrainingProgram
+END
+
+IF (OBJECT_ID('dbo.FK_EmployeeTraining', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.EmployeeTraining DROP CONSTRAINT FK_EmployeeTraining
+END
+
+IF (OBJECT_ID('dbo.FK_DepartmentEmployee', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.Employee DROP CONSTRAINT FK_DepartmentEmployee
+END
+
+IF (OBJECT_ID('dbo.FK_CustomerProduct', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.Product DROP CONSTRAINT FK_CustomerProduct
+END
+
+IF (OBJECT_ID('dbo.FK_ProductTypeProduct', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.Product DROP CONSTRAINT FK_ProductTypeProduct
+END
+
+IF (OBJECT_ID('dbo.FK_OrderProductOrder', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.ProductOrder DROP CONSTRAINT FK_OrderProductOrder
+END
+
+IF (OBJECT_ID('dbo.FK_ProductProductOrder', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.ProductOrder DROP CONSTRAINT FK_ProductProductOrder
+END
+
+IF (OBJECT_ID('dbo.FK_CustomerPaymentOrder', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.[Order] DROP CONSTRAINT FK_CustomerPaymentOrder
+END
+
+IF (OBJECT_ID('dbo.FK_CustomerOrder', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.[Order] DROP CONSTRAINT FK_CustomerOrder
+END
+
+IF (OBJECT_ID('dbo.FK_PaymentTypeCustomer', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.CustomerPayment DROP CONSTRAINT FK_PaymentTypeCustomer
+END
+
+IF (OBJECT_ID('dbo.FK_CustomerPayment', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.CustomerPayment DROP CONSTRAINT FK_CustomerPayment
+END
+
 DROP TABLE IF EXISTS Department;
 DROP TABLE IF EXISTS Employee;
 DROP TABLE IF EXISTS EmployeeComputer;
@@ -11,6 +77,9 @@ DROP TABLE IF EXISTS TrainingProgram;
 DROP TABLE IF EXISTS Computer;
 DROP TABLE IF EXISTS Customer;
 DROP TABLE IF EXISTS CustomerPayment;
+
+
+
 CREATE TABLE Computer (
   ComputerId          INTEGER NOT NULL PRIMARY KEY IDENTITY,
   DatePurchased       DATE NOT NULL,
