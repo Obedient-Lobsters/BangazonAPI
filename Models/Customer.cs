@@ -27,13 +27,13 @@ namespace BangazonAPI.Models
         [DataType(DataType.Date),Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime AcctCreationDate { get; set; }
+
         //Creating DateTime on account creation for property LastLogin is acceptable per Senior Dev Jordan
         //This property is currently not tracked or modified in issues or tickets
         [DataType(DataType.Date),Required]
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime LastLogin { get; set; }
 
-        public IEnumerable<Product> Products;
         public IEnumerable<PaymentType> Payments;
         public IEnumerable<Customer> Customers;
     }
