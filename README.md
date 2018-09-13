@@ -11,7 +11,7 @@ Google Chrome
 ### Enitity Relationship Diagram
 ![ERD](/images/bangazonv2.png)
 
-###Http Request Methods
+### Http Request Methods
 (content to be filled)
 ###Employees
 http methods supported: GET, POST, PUT example body:
