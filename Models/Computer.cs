@@ -14,7 +14,8 @@ namespace BangazonAPI.Models
         [Required]
         [DataType(DataType.Date)]
         public DateTime DatePurchased { get; set; }
-        public DateTime DateDecommissioned { get; set; }
+
+		public DateTime? DateDecommissioned { get; set; }
 
         [Required]
         public bool Working { get; set; }
