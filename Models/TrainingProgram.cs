@@ -10,10 +10,9 @@ namespace BangazonAPI.Models
         [Key]
         public int TrainingProgramId { get; set; }
 
-        [Required]
-        public string ProgramName { get; set; }
         [StringLength(80,
-            ErrorMessage ="Too Many Characters")]
+            ErrorMessage ="Too Many Characters"), Required]
+        public string ProgramName { get; set; }
   
         [Required]
         [DataType(DataType.Date)]
