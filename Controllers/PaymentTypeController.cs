@@ -76,6 +76,48 @@ namespace BangazonAPI.Controllers
                 return CreatedAtRoute("GetPaymentType", new { id = paymentTypeId }, paymentType);
             }
         }
+        // PUT PaymentType/Put
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] PaymentType paymentType)
+        {
+            string sql = $@"
+            UPDATE PaymentType
+            SET paymentTypeName = '{paymentType.PaymentTypeName}'
+            WHERE paymentTypeId = {id}";
+
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    int rowsAffected = await conn.ExecuteAsync(sql);
+                    if (rowsAffected > 0)
+                    {
+                        return new StatusCodeResult(StatusCodes.Status204NoContent);
+                    }
+                    throw new Exception("No rows affected");
+                }
+            }
+            catch (Exception)
+            {
+                if (!PaymentTypeExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+        private bool PaymentTypeExists(int id)
+        {
+            string sql = $"SELECT PaymentTypeId, PaymentTypeName FROM PaymentType WHERE paymentTypeId = {id}";
+            using (IDbConnection conn = Connection)
+            {
+                return conn.Query<PaymentType>(sql).Count() > 0;
+            }
+        }
+
 
         //// GET: PaymentType/Edit/5
         //public ActionResult Edit(int id)
