@@ -17,10 +17,10 @@ namespace BangazonAPI.Models
 
         public Customer Customer { get; set; }
 
-        public int? PaymentTypeId { get; set; } // ? means that the variable can be null
+        public int? CustomerPaymentId { get; set; } // ? means that the variable can be null
 
 
-        public IEnumerable<Product> Product;
+        //public IEnumerable<Product> Product;
 
     }
 }
