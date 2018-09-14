@@ -32,7 +32,7 @@ namespace BangazonAPI.Controllers
             }
         }
 
-        // GET api/producttype
+        // GET /producttype
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -44,9 +44,28 @@ namespace BangazonAPI.Controllers
                     sql);
                 return Ok(fullProductType);
             }
+        }
+
+
+        // POST /values
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] ProductType value)
+        {
+            string sql = $@"INSERT INTO ProductType
+            (ProductTypeName)
+            VALUES
+            ('{value.ProductTypeName}');
+            select MAX(Id) from ProductType";
+
+            using (IDbConnection conn = Connection)
+            {
+                var newProductTypeId = (await conn.QueryAsync<int>(sql)).Single();
+                value.ProductTypeId = newProductTypeId;
+                return CreatedAtRoute("GetProductType", new { id = newProductTypeId }, value);
+            }
 
         }
 
-   
+
     }
 }
