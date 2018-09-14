@@ -46,7 +46,7 @@ namespace BangazonAPI.Controllers
         }
 
         // GET: PaymentType/3
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetPaymentType")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             using (IDbConnection conn = Connection)
@@ -58,28 +58,24 @@ namespace BangazonAPI.Controllers
             }
         }
 
-        //// GET: PaymentType/Create
-        //public ActionResult Create()
-        //{
-        //    return View();
-        //}
 
-        //// POST: PaymentType/Create
-        //[HttpPost]
-        //[ValidateAntiForgeryToken]
-        //public ActionResult Create(IFormCollection collection)
-        //{
-        //    try
-        //    {
-        //        // TODO: Add insert logic here
+        // POST: PaymentType/Post
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] PaymentType paymentType)
+        {
+            string sql = $@"INSERT INTO PaymentType
+            (paymentTypeName)
+            VALUES
+            ('{paymentType.PaymentTypeName}');
+            select MAX(paymentTypeId) from PaymentType;";
 
-        //        return RedirectToAction(nameof(Index));
-        //    }
-        //    catch
-        //    {
-        //        return View();
-        //    }
-        //}
+            using (IDbConnection conn = Connection)
+            {
+                var paymentTypeId = (await conn.QueryAsync<int>(sql)).Single();
+                paymentType.PaymentTypeId = paymentTypeId;
+                return CreatedAtRoute("GetPaymentType", new { id = paymentTypeId }, paymentType);
+            }
+        }
 
         //// GET: PaymentType/Edit/5
         //public ActionResult Edit(int id)
