@@ -48,11 +48,20 @@ namespace BangazonAPI.Controllers
 //            return "value";
 //        }
 
-//        // POST api/values
-//        [HttpPost]
-//        public void Post([FromBody] string value)
-//        {
-//        }
+     // POST api/values
+       [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Product value)
+        {
+            using (IDbConnection conn = Connection)
+            {
+                string sql = $@"INSERT INTO Product
+                (ProductId, Price, Title, Description, Quantity, CustomerId, ProductTypeId) 
+                VALUES
+                ();
+                select "
+
+            }
+        }
 
 //        // PUT api/values/5
 //        [HttpPut("{id}")]
