@@ -45,11 +45,18 @@ namespace BangazonAPI.Controllers
             }
         }
 
-        // GET: PaymentType/Details/5
-        //public ActionResult Details(int id)
-        //{
-        //    return View();
-        //}
+        // GET: PaymentType/3
+        [HttpGet("{id}")]
+        public async Task<IActionResult> Get([FromRoute] int id)
+        {
+            using (IDbConnection conn = Connection)
+            {
+                string sql = $"SELECT * FROM PaymentType WHERE paymentTypeId = {id}";
+
+                var theSinglePaymentType = (await conn.QueryAsync<PaymentType>(sql)).Single();
+                return Ok(theSinglePaymentType);
+            }
+        }
 
         //// GET: PaymentType/Create
         //public ActionResult Create()
