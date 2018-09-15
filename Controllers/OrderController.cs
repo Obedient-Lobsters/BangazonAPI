@@ -37,17 +37,17 @@ namespace BangazonAPI.Controllers
             using (IDbConnection conn = Connection)
             {
                 string sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId JOIN CustomerPayment ON [Order].CustomerPaymentId = CustomerPayment.CustomerPaymentId";
-                //if (_include != null)
-                //{
-                //    if (_include == "product")
-                //    {
-                //        sql += $" SELECT * FROM ProductOrder JOIN Product ON ProductOrder.ProductId = Product.ProductId";
-                //    }
-                //    else if (_include == "customers")
-                //    {
-                //        sql += $" JOIN CustomerPayment ON [Order].CustomerPaymentId = CustomerPayment.CustomerPaymentId ";
-                //    }
-                //}
+                if (_include != null)
+                {
+                    if (_include == "products")
+                    {
+                        sql += $" SELECT * FROM ProductOrder JOIN Product ON ProductOrder.ProductId = Product.ProductId";
+                    }
+                    else if (_include == "customers")
+                    {
+                        sql += $" JOIN Customer ON [Order].CustomerId = Customer.CustomerId ";
+                    }
+                }
                 var fullOrder = await conn.QueryAsync<Order>(
                     sql);
                 return Ok(fullOrder);
