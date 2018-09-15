@@ -12,7 +12,7 @@ using System.Data;
 
 namespace BangazonAPI.Controllers
 {
-    [Route("[controller]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
     {
@@ -30,34 +30,41 @@ namespace BangazonAPI.Controllers
                 return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
             }
         }
-        // GET api/order
+        // GET order
         [HttpGet]
-        public async Task<IActionResult> Get(string argument)
+        public async Task<IActionResult> Get(string _include)
         {
             using (IDbConnection conn = Connection)
             {
                 string sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId JOIN CustomerPayment ON [Order].CustomerPaymentId = CustomerPayment.CustomerPaymentId";
-                if (argument != null)
-                {
-
-                }
+                //if (_include != null)
+                //{
+                //    if (_include == "product")
+                //    {
+                //        sql += $" SELECT * FROM ProductOrder JOIN Product ON ProductOrder.ProductId = Product.ProductId";
+                //    }
+                //    else if (_include == "customers")
+                //    {
+                //        sql += $" JOIN CustomerPayment ON [Order].CustomerPaymentId = CustomerPayment.CustomerPaymentId ";
+                //    }
+                //}
                 var fullOrder = await conn.QueryAsync<Order>(
                     sql);
                 return Ok(fullOrder);
             }
         }
 
-        // GET api/order/5
+        // GET order/5
         [HttpGet("{id}")]
-        async Task<IActionResult> Get([FromRoute] int id)
+        public async Task<IActionResult> Get([FromRoute] int id)
         {
             using (IDbConnection conn = Connection)
             {
-                string sql = $"SELECT * FROM Order WHERE OrderId = {id}";
+                string sql = $"SELECT * FROM [Order] WHERE OrderId = {id}";
 
-                var fullOrder = await conn.QueryAsync<Order>(
-                    sql);
-                return Ok(fullOrder);
+                var theSingleOrder = (await conn.QueryAsync<Order>(
+                    sql)).Single();
+                return Ok(theSingleOrder);
             }
 
         }
