@@ -138,7 +138,10 @@ namespace BangazonAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            string sql = $@"DELETE FROM [Order] WHERE OrderId = {id}";
+            string sql = $@"DELETE FROM [Order] WHERE OrderId = {id} IF (OBJECT_ID('dbo.FK_OrderProductOrder', 'F') IS NOT NULL)
+BEGIN
+    ALTER TABLE dbo.ProductOrder DROP CONSTRAINT FK_OrderProductOrder
+END DELETE FROM ProductOrder WHERE OrderId = {id}";
             using (IDbConnection conn = Connection)
             {
                 int rowsAffected = await conn.ExecuteAsync(sql);
