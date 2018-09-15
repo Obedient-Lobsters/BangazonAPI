@@ -69,22 +69,85 @@ namespace BangazonAPI.Controllers
 
         }
 
-        // POST api/values
+        // POST api/order
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] Order order)
         {
+            string sql = $@"INSERT INTO [Order]
+            (CustomerId)
+            VALUES
+            ('{order.CustomerId}');
+            select MAX(OrderId) from [Order]";
+
+            using (IDbConnection conn = Connection)
+            {
+                var newOrderId = (await conn.QueryAsync<int>(sql)).Single();
+                order.OrderId = newOrderId;
+                return CreatedAtRoute("GetOrder", new { OrderId = newOrderId }, order);
+            }
+
         }
 
         // PUT api/values/5
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] Order order)
         {
+            string sql = $@"
+            UPDATE [Order]
+            SET CustomerPaymentId = '{order.CustomerPaymentId}'
+            WHERE OrderId = {id}";
+
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    int rowsAffected = await conn.ExecuteAsync(sql);
+                    if (rowsAffected > 0)
+                    {
+                        return new StatusCodeResult(StatusCodes.Status204NoContent);
+                    }
+                    throw new Exception("No rows affected");
+                }
+            }
+            catch (Exception)
+            {
+                if (!OrderExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
         }
 
-        // DELETE api/values/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
+        //This method checks if item exists in database returns a boolean value. This method is refered to in PUT method
+        private bool OrderExists(int id)
         {
+            string sql = $"SELECT OrderId FROM [Order] WHERE OrderId = {id}";
+            using (IDbConnection conn = Connection)
+            {
+                return conn.Query<PaymentType>(sql).Count() > 0;
+            }
+        }
+
+
+        // DELETE order/Delete
+        // This method executes the DELETE command. Its parameter is id taken from route
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            string sql = $@"DELETE FROM [Order] WHERE OrderId = {id}";
+            using (IDbConnection conn = Connection)
+            {
+                int rowsAffected = await conn.ExecuteAsync(sql);
+                if (rowsAffected > 0)
+                {
+                    return new StatusCodeResult(StatusCodes.Status204NoContent);
+                }
+                throw new Exception("No rows affected");
+            }
         }
     }
 }

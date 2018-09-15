@@ -157,7 +157,7 @@ CREATE TABLE CustomerPayment (
 CREATE TABLE [Order] (
   OrderId             INTEGER NOT NULL PRIMARY KEY IDENTITY,
   CustomerId          INTEGER NOT NULL,
-  CustomerPaymentId       INTEGER NOT NULL,
+  CustomerPaymentId       INTEGER,
   CONSTRAINT FK_CustomerOrder FOREIGN KEY(CustomerId)REFERENCES Customer(CustomerId),
   CONSTRAINT FK_CustomerPaymentOrder FOREIGN KEY(CustomerPaymentId)REFERENCES CustomerPayment(CustomerPaymentId)
 );
