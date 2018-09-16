@@ -20,7 +20,7 @@ namespace BangazonAPI.Models
         public int? CustomerPaymentId { get; set; } // ? means that the variable can be null
 
 
-        public IEnumerable<Product> Product;
+        public List<Product> Product { get; set; }
 
     }
 }
