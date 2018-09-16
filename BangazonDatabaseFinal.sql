@@ -298,9 +298,8 @@ INSERT INTO [Order](CustomerPaymentId,CustomerId)
 VALUES(
 2,
 2);
-INSERT INTO [Order](CustomerPaymentId,CustomerId)
+INSERT INTO [Order](CustomerId)
 VALUES(
-1,
 1);
 INSERT INTO Product(Price,Title,Description,Quantity,CustomerId,ProductTypeId)
 VALUES(

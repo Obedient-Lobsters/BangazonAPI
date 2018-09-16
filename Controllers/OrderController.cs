@@ -31,28 +31,43 @@ namespace BangazonAPI.Controllers
             }
         }
         // GET order
+        //[HttpGet]
+        //public async Task<IActionResult> Get(string _include)
+        //{
+        //    using (IDbConnection conn = Connection)
+        //    {
+        //        string sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId JOIN CustomerPayment ON [Order].CustomerPaymentId = CustomerPayment.CustomerPaymentId";
+        //        var fullOrder = await conn.QueryAsync<Order>(sql);
+        //        if (_include != null)
+        //        {
+        //            if (_include == "products")
+        //            {
+        //                sql += $" SELECT Price, Title, Description FROM ProductOrder JOIN Product ON ProductOrder.ProductId = Product.ProductId JOIN  ";
+        //                fullOrder = await conn.QueryAsync<Order, Product, Order>(
+        //                    sql, (b, a) => { b.Product = a; return b; }, splitOn: "OrderId, ProductId");
+        //            }
+        //            else if (_include == "customers")
+        //            {
+        //                sql += $"JOIN Customer as Cust ON [Order].CustomerId = Cust.CustomerId";
+        //                fullOrder = await conn.QueryAsync<Order, Customer, Order>(
+        //                    sql, (b, c) => { b.Customer = c; return b; }, splitOn: "OrderId, CustomerId");
+        //            }
+        //        }
+        //        return Ok(fullOrder);
+        //    }
+        //}
+
         [HttpGet]
-        public async Task<IActionResult> Get(string _include)
+        public async Task<IActionResult> Get(bool completed)
         {
             using (IDbConnection conn = Connection)
             {
-                string sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId JOIN CustomerPayment ON [Order].CustomerPaymentId = CustomerPayment.CustomerPaymentId";
-                var fullOrder = await conn.QueryAsync<Order>(sql);
-                if (_include != null)
+                string sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId";
+                if (completed == false)
                 {
-                    if (_include == "products")
-                    {
-                        sql += $"SELECT Price, Title, Description FROM ProductOrder JOIN Product ON ProductOrder.ProductId = Product.ProductId ";
-                        fullOrder = await conn.QueryAsync<Order, List<Product>, Order>(
-                            sql, (b, a) => { b.Product = a; return b; });
-                    }
-                    else if (_include == "customers")
-                    {
-                        sql += $"JOIN Customer as Cust ON [Order].CustomerId = Cust.CustomerId";
-                        fullOrder = await conn.QueryAsync<Order, Customer, Order>(
-                            sql, (b, c) => { b.Customer = c; return b; }, splitOn: "OrderId, CustomerId");
-                    }
+                    sql += " WHERE [Order].CustomerPaymentId is NULL";
                 }
+                var fullOrder = await conn.QueryAsync<Order>(sql);
                 return Ok(fullOrder);
             }
         }
