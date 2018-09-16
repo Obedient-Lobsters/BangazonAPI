@@ -67,6 +67,10 @@ namespace BangazonAPI.Controllers
                 {
                     sql += " WHERE [Order].CustomerPaymentId is NULL";
                 }
+                if (completed == true)
+                {
+                    sql += " WHERE [Order].CustomerPaymentId is not NULL";
+                }
                 var fullOrder = await conn.QueryAsync<Order>(sql);
                 return Ok(fullOrder);
             }
