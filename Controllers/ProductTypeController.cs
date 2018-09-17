@@ -55,7 +55,7 @@ namespace BangazonAPI.Controllers
             (ProductTypeName)
             VALUES
             ('{value.ProductTypeName}');
-            select MAX(Id) from ProductType";
+            select MAX(ProductTypeId) from ProductType";
 
             using (IDbConnection conn = Connection)
             {
