@@ -12,7 +12,7 @@ using System.Data;
 
 namespace BangazonAPI.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("[controller]")]
     [ApiController]
     public class OrderController : ControllerBase
     {
@@ -31,47 +31,39 @@ namespace BangazonAPI.Controllers
             }
         }
         // GET order
-        //[HttpGet]
-        //public async Task<IActionResult> Get(string _include)
-        //{
-        //    using (IDbConnection conn = Connection)
-        //    {
-        //        string sql = "Select * from [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId";
-        //        var fullOrder = await conn.QueryAsync<Order>(sql);
-        //        if (_include != null)
-        //        {
-        //            if (_include == "products")
-        //            {
-        //                sql += $" SELECT Price, Title, Description FROM ProductOrder JOIN Product ON ProductOrder.ProductId = Product.ProductId JOIN  ";
-        //                fullOrder = await conn.QueryAsync<Order, Product, Order>(
-        //                    sql, (b, a) => { b.Product = a; return b; }, splitOn: "OrderId, ProductId");
-        //            }
-        //            else if (_include == "customers")
-        //            {
-        //                sql += $"JOIN Customer as Cust ON [Order].CustomerId = Cust.CustomerId";
-        //                fullOrder = await conn.QueryAsync<Order, Customer, Order>(
-        //                    sql, (b, c) => { b.Customer = c; return b; }, splitOn: "OrderId, CustomerId");
-        //            }
-        //        }
-        //        return Ok(fullOrder);
-        //    }
-        //}
-
         [HttpGet]
-        public async Task<IActionResult> Get(bool completed)
+        public async Task<IActionResult> Get(string _include, string completed)
         {
             using (IDbConnection conn = Connection)
             {
-                string sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId";
-                if (completed == false)
-                {
-                    sql += " WHERE [Order].CustomerPaymentId is NULL";
-                }
-                if (completed == true)
-                {
-                    sql += " WHERE [Order].CustomerPaymentId is not NULL";
-                }
+                string sql = "Select * from [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId";
                 var fullOrder = await conn.QueryAsync<Order>(sql);
+                if (_include != null && _include.Contains("products"))
+                {
+
+                        sql += $" SELECT Price, Title, Description FROM ProductOrder JOIN Product ON ProductOrder.ProductId = Product.ProductId JOIN  ";
+                        fullOrder = await conn.QueryAsync<Order, Product, Order>(
+                            sql, (b, a) => { b.Product = a; return b; }, splitOn: "OrderId, ProductId");
+                }
+                if (_include != null && _include.Contains("customers"))
+                    {
+                        sql += $" JOIN Customer as Cust ON [Order].CustomerId = Cust.CustomerId";
+                        fullOrder = await conn.QueryAsync<Order, Customer, Order>(
+                            sql, (b, c) => { b.Customer = c; return b; }, splitOn: "OrderId, CustomerId");
+                    }
+
+                if (completed != null && completed.Contains("true"))
+                {
+                    sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId";
+                    sql += " WHERE [Order].CustomerPaymentId is not NULL";
+                    fullOrder = await conn.QueryAsync<Order>(sql);
+                }
+                if (completed != null && completed.Contains("false"))
+                {
+                    sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId";
+                    sql += " WHERE [Order].CustomerPaymentId is NULL";
+                    fullOrder = await conn.QueryAsync<Order>(sql);
+                }
                 return Ok(fullOrder);
             }
         }
