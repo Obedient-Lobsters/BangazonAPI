@@ -46,6 +46,18 @@ namespace BangazonAPI.Controllers
             }
         }
 
+        // GET: ProductType/2
+        [HttpGet("{id}", Name = "GetProductType")]
+        public async Task<IActionResult> Get([FromRoute] int id)
+        {
+            using (IDbConnection conn = Connection)
+            {
+                string sql = $"SELECT * FROM ProductType WHERE productTypeId = {id}";
+                var singleProductType = (await conn.QueryAsync<ProductType>(sql)).Single();
+                return Ok(singleProductType);
+            }
+        }
+
 
         // POST /values
         [HttpPost]
