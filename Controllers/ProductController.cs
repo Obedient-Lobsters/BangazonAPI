@@ -33,6 +33,8 @@ namespace BangazonAPI.Controllers
                 return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
             }
         }
+
+        //Get all and Get single methods displayed
         // GET All Products
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -61,30 +63,69 @@ namespace BangazonAPI.Controllers
 
         }
 
+        //This method will demonstrate the POST command
+        // POST Product/Post
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Product product)
+        {
 
-        // POST api/values
-        //[HttpPost]
-        // public async Task<IActionResult> Post([FromBody] Product value)
-        // {
-        //     using (IDbConnection conn = Connection)
-        //     {
-        //         string sql = $@"INSERT INTO Product
-        //         (ProductId, Price, Title, Description, Quantity, CustomerId, ProductTypeId) 
-        //         VALUES
-        //         ();
-        //         select "
+            string sql = $@"INSERT INTO Product
+                 (ProductId, Price, Title, Description, Quantity, CustomerId, ProductTypeId) 
+                 VALUES
+                ('{product.ProductId}', '{product.Price}', '{product.Title}', '{product.Description}', '{product.Quantity}', '{product.CustomerId}', '{product.ProductTypeId}');
+                 select MAX(ProductId) from Product;";
 
-        //     }
-        // }
+            using (IDbConnection conn = Connection)
+            {
+                var productId = (await conn.QueryAsync<int>(sql)).Single();
+                product.ProductId = productId;
+                return CreatedAtRoute("GetProduct", new { id = productId }, product);
+            }
+        }
 
-        //        // PUT api/values/5
-        //        [HttpPut("{id}")]
-        //        public void Put(int id, [FromBody] string value)
-        //        {
-        //        }
+        //This method will demostrate the Put function
+        // PUT Product/put
+        [HttpPut("{id}")]
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] Product product)
+        {
+            string sql = $@"
+            UPDATE Product
+            SET Title = '{product.Title}'
+            WHERE productId = {id}";
 
-                // DELETE Product/2
-                  [HttpDelete("{id}")]
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    int rowsAffected = await conn.ExecuteAsync(sql);
+                    if (rowsAffected > 0)
+                    {
+                        return new StatusCodeResult(StatusCodes.Status204NoContent);
+                    }
+                    throw new Exception("No rows were affected");
+                }
+
+            }
+            catch (Exception)
+            {
+                if (!ProductExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+
+        private bool ProductExists(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        // DELETE Product/2
+        [HttpDelete("{id}")]
                    public async Task<IActionResult> Delete([FromRoute] int id)
         {
             string sql = $@"DELETE FROM Product WHERE ProductId = {id}";
