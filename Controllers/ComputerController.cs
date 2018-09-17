@@ -8,8 +8,9 @@ using System.Data;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using BangazonAPI.Models;
 
-namespace BangazonAPI.Models
+namespace BangazonAPI.Controllers
 {
 	[Route("[controller]")]
 	[ApiController]
@@ -68,7 +69,7 @@ namespace BangazonAPI.Models
 			string sql = $@"INSERT INTO Computer
             (DatePurchased, DateDecommissioned, Working, ModelName, Manufacturer)
             VALUES
-            ('{computer.DatePurchased}', '{(object)computer.DateDecommissioned ?? DBNull.Value}', '{(computer.Working ? 1 : 0)}', '{computer.ModelName}', '{computer.Manufacturer}');
+            ('{computer.DatePurchased}', {(computer.DateDecommissioned == null ? "null" : $"'{computer.DateDecommissioned }'")}, '{(computer.Working ? 1 : 0)}', '{computer.ModelName}', '{computer.Manufacturer}');
             select MAX(ComputerId) from Computer;";
 
 			using (IDbConnection conn = Connection)
