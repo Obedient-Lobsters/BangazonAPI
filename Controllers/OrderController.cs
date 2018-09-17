@@ -36,7 +36,7 @@ namespace BangazonAPI.Controllers
         }
         // GET order
         // Arguments: 1.)_include controlls logic to select either products or customers. To utilize this query string parameter, input the following url: http://localhost:5000/order?_include=products or http://localhost:5000/order?_include=customers
-        // 2.) completed takes either true or false and returns orders that are either completed or not. Example usage: 
+        // 2.) completed takes either true or false and returns orders that are either completed or not. Example usage: http://localhost:5000/order?completed=true
         [HttpGet]
         public async Task<IActionResult> Get(string _include, string completed)
         {
@@ -104,6 +104,7 @@ namespace BangazonAPI.Controllers
 
         // GET order/5
         [HttpGet("{id}", Name = "GetOrder")]
+        //arguments: id specifies which order to get
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             using (IDbConnection conn = Connection)
@@ -119,7 +120,8 @@ namespace BangazonAPI.Controllers
 
         // POST api/order
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Order order)
+        //arguments: order specifies the order to be posted. This takes the form of a json object with the value in this format: { "CustomerId":"1"}
+    public async Task<IActionResult> Post([FromBody] Order order)
         {
             string sql = $@"INSERT INTO [Order]
             (CustomerId)
@@ -138,6 +140,7 @@ namespace BangazonAPI.Controllers
 
         // PUT api/values/5
         [HttpPut("{id}")]
+        //arguments: order specifies the order to be updated. This takes the form of a json object with the value in this format: { "CustomerId":"1", "CustomerPaymentId":"2"}
         public async Task<IActionResult> Put([FromRoute] int id, [FromBody] Order order)
         {
             string sql = $@"
