@@ -77,14 +77,14 @@ namespace BangazonAPI.Controllers
             }
         }
 
-        // PUT producttype/PUT
+        // PUT producttype/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> Put([FromRoute] int ProductTypeId, [FromBody] ProductType value)
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] ProductType value)
         {
             string sql = $@"
             UPDATE ProductType
-            SET Name = '{value.ProductTypeName}',
-            WHERE Id = {ProductTypeId}";
+            SET ProductTypeName = '{value.ProductTypeName}'
+            WHERE ProductTypeId = {id}";
 
             try
             {
@@ -100,7 +100,7 @@ namespace BangazonAPI.Controllers
             }
             catch (Exception)
             {
-                if (!ProductTypeExists(ProductTypeId))
+                if (!ProductTypeExists(id))
                 {
                     return NotFound();
                 }
@@ -113,7 +113,7 @@ namespace BangazonAPI.Controllers
         //this boolean method checks to see if item already exists in DB, and it is needed for the PUT method
         private bool ProductTypeExists(int id)
         {
-            string sql = $"SELECT Id, ProductTypeName FROM ProductType WHERE Id = {id}";
+            string sql = $"SELECT ProductTypeId FROM ProductType WHERE ProductTypeId = {id}";
             using (IDbConnection conn = Connection)
             {
                 return conn.Query<ProductType>(sql).Count() > 0;
