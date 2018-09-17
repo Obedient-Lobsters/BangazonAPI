@@ -110,6 +110,24 @@ namespace BangazonAPI.Controllers
                 }
             }
         }
+    
+
+        // DELETE ProductType/5
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            string sql = $@"DELETE FROM ProductType WHERE ProductTypeId = {id}";
+            using (IDbConnection conn = Connection)
+            {
+                int rowsAffected = await conn.ExecuteAsync(sql);
+                if (rowsAffected > 0)
+                {
+                    return new StatusCodeResult(StatusCodes.Status204NoContent);
+                }
+                throw new Exception("No rows affected");
+            }
+        }
+
         //this boolean method checks to see if item already exists in DB, and it is needed for the PUT method
         private bool ProductTypeExists(int id)
         {
