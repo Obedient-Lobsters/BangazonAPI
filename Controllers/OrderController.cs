@@ -41,32 +41,57 @@ namespace BangazonAPI.Controllers
                 if (_include != null && _include.Contains("products"))
                 {
 
-                        sql += $" SELECT Price, Title, Description FROM ProductOrder JOIN Product ON ProductOrder.ProductId = Product.ProductId JOIN  ";
-                        fullOrder = await conn.QueryAsync<Order, Product, Order>(
-                            sql, (b, a) => { b.Product = a; return b; }, splitOn: "OrderId, ProductId");
-                }
-                if (_include != null && _include.Contains("customers"))
+                sql = $" Select * FROM [Order] JOIN ProductOrder ON [Order].OrderId = ProductOrder.OrderId JOIN Product ON ProductOrder.ProductId = Product.ProductId";
+                    Dictionary<int, Order> report = new Dictionary<int, Order>();
+                    fullOrder = await conn.QueryAsync<Order, Product, Order>(
+                    sql, (order, product) =>
                     {
+                        // Does the Dictionary already have the key of the OrderId?
+                        if (!report.ContainsKey(order.OrderId))
+                        {
+                            // Create the entry in the dictionary
+                            report[order.OrderId] = order;
+                        }
+
+                        // Add the product to the current Product entry in Dictionary
+                        report[order.OrderId].Product.Add(product);
+                        return order;
+                    }, splitOn:"OrderId"
+                        );
+                    return Ok(report.Values);
+                }
+            if (_include != null && _include.Contains("customers"))
+                {
                         sql += $" JOIN Customer as Cust ON [Order].CustomerId = Cust.CustomerId";
                         fullOrder = await conn.QueryAsync<Order, Customer, Order>(
                             sql, (b, c) => { b.Customer = c; return b; }, splitOn: "OrderId, CustomerId");
-                    }
+                    return Ok(fullOrder);
+                }
 
-                if (completed != null && completed.Contains("true"))
-                {
-                    sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId";
-                    sql += " WHERE [Order].CustomerPaymentId is not NULL";
-                    fullOrder = await conn.QueryAsync<Order>(sql);
+            if (completed != null && completed.Contains("true"))
+               {
+                        sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId";
+                        sql += " WHERE [Order].CustomerPaymentId is not NULL";
+                     fullOrder = await conn.QueryAsync<Order>(sql);
+                    return Ok(fullOrder);
+               }
+                    if (completed != null && completed.Contains("false"))
+                    {
+                        sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId";
+                        sql += " WHERE [Order].CustomerPaymentId is NULL";
+                     fullOrder = await conn.QueryAsync<Order>(sql);
+                    return Ok(fullOrder);
                 }
-                if (completed != null && completed.Contains("false"))
-                {
-                    sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId";
-                    sql += " WHERE [Order].CustomerPaymentId is NULL";
-                    fullOrder = await conn.QueryAsync<Order>(sql);
-                }
-                return Ok(fullOrder);
-            }
+
+
+                return Ok();
+
+            };
+           
+
         }
+
+  
 
         // GET order/5
         [HttpGet("{id}")]
@@ -97,7 +122,7 @@ namespace BangazonAPI.Controllers
             {
                 var newOrderId = (await conn.QueryAsync<int>(sql)).Single();
                 order.OrderId = newOrderId;
-                return CreatedAtRoute("GetOrder", new { OrderId = newOrderId }, order);
+                return CreatedAtRoute("GetOrder", new { id = newOrderId }, order);
             }
 
         }
@@ -153,9 +178,9 @@ namespace BangazonAPI.Controllers
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
             string sql = $@"DELETE FROM [Order] WHERE OrderId = {id} IF (OBJECT_ID('dbo.FK_OrderProductOrder', 'F') IS NOT NULL)
-BEGIN
-    ALTER TABLE dbo.ProductOrder DROP CONSTRAINT FK_OrderProductOrder
-END DELETE FROM ProductOrder WHERE OrderId = {id}";
+                BEGIN
+                    ALTER TABLE dbo.ProductOrder DROP CONSTRAINT FK_OrderProductOrder
+                END DELETE FROM ProductOrder WHERE OrderId = {id}";
             using (IDbConnection conn = Connection)
             {
                 int rowsAffected = await conn.ExecuteAsync(sql);

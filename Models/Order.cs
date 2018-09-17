@@ -20,7 +20,7 @@ namespace BangazonAPI.Models
         public int? CustomerPaymentId { get; set; } // ? means that the variable can be null
 
 
-        public Product Product { get; set; }
+        public List<Product> Product { get; set; } = new List<Product>();
 
     }
 }
