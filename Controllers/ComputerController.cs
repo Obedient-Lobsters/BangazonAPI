@@ -68,7 +68,7 @@ namespace BangazonAPI.Models
 			string sql = $@"INSERT INTO Computer
             (DatePurchased, DateDecommissioned, Working, ModelName, Manufacturer)
             VALUES
-            ('{computer.DatePurchased}', '{computer.DateDecommissioned}', '{(computer.Working ? 1 : 0)}', '{computer.ModelName}', '{computer.Manufacturer}');
+            ('{computer.DatePurchased}', '{(object)computer.DateDecommissioned ?? DBNull.Value}', '{(computer.Working ? 1 : 0)}', '{computer.ModelName}', '{computer.Manufacturer}');
             select MAX(ComputerId) from Computer;";
 
 			using (IDbConnection conn = Connection)
