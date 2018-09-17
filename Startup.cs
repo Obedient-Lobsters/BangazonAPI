@@ -40,11 +40,10 @@ namespace BangazonAPI
                 app.UseHsts();
             }
 
-<<<<<<< HEAD
+
+ 
            // app.UseHttpsRedirection();
-=======
-            //app.UseHttpsRedirection();
->>>>>>> 31318d488b3db92e66689086d667c94331a55d94
+
             app.UseMvc();
         }
     }
