@@ -35,7 +35,8 @@ namespace BangazonAPI.Controllers
             }
         }
         // GET order
-        // to GET include the customer
+        // Arguments: 1.)_include controlls logic to select either products or customers. To utilize this query string parameter, input the following url: http://localhost:5000/order?_include=products or http://localhost:5000/order?_include=customers
+        // 2.) completed takes either true or false and returns orders that are either completed or not. Example usage: 
         [HttpGet]
         public async Task<IActionResult> Get(string _include, string completed)
         {
