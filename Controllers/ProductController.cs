@@ -72,7 +72,7 @@ namespace BangazonAPI.Controllers
             string sql = $@"INSERT INTO Product
                  (Price, Title, Description, Quantity, CustomerId, ProductTypeId) 
                  VALUES
-                ('{product.Price}', '{product.Title}', '{product.Description}', '{product.Quantity}', '{product.CustomerId}', '{product.ProductTypeId}');
+                ('{product.Price}', '{product.Title}', '{product.Description}', '{product.CustomerId}', '{product.Quantity}', '{product.ProductTypeId}');
                  select MAX(ProductId) from Product;";
 
             using (IDbConnection conn = Connection)
@@ -91,11 +91,11 @@ namespace BangazonAPI.Controllers
             string sql = $@"
             UPDATE Product
             SET Price = '{product.Price}',
-                        Title = '{product.Title}',
-                        Description = '{product.Description}',
-                        CustomerId = '{product.CustomerId}',
-                        Quantity = '{product.Quantity}',
-                        ProductTypeId = '{product.ProductTypeId}'
+                Title = '{product.Title}',
+                Description = '{product.Description}',
+                CustomerId = '{product.CustomerId}',
+                Quantity = '{product.Quantity}',
+                ProductTypeId = '{product.ProductTypeId}',
 
                         
             WHERE productId = {id}";
@@ -113,6 +113,7 @@ namespace BangazonAPI.Controllers
                 }
 
             }
+
             catch (Exception)
             {
                 if (!ProductExists(id))
@@ -120,21 +121,22 @@ namespace BangazonAPI.Controllers
                     return NotFound();
                 }
                 else
-                {
-                    throw;
-                }
-            }
-        }
+       {
+            throw;
+          }
+       }
+    }
 
-    private bool ProductExists(int id)
-    {
-            string sql = "SELECT * FROM PProduct WHERE ProductId = {id}";
+            private bool ProductExists(int id)
+            { 
+            string sql = "SELECT * FROM Product WHERE ProductId = {id}";
             using (IDbConnection conn = Connection)
             {
                 return conn.Query<Product>(sql).Count() > 0;
             }
       }
 
+        //Delete method demonstrated
         // DELETE Product/2
         [HttpDelete("{id}")]
                    public async Task<IActionResult> Delete([FromRoute] int id)
