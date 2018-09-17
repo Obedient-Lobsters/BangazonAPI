@@ -70,9 +70,9 @@ namespace BangazonAPI.Controllers
         {
 
             string sql = $@"INSERT INTO Product
-                 (ProductId, Price, Title, Description, Quantity, CustomerId, ProductTypeId) 
+                 (Price, Title, Description, Quantity, CustomerId, ProductTypeId) 
                  VALUES
-                ('{product.ProductId}', '{product.Price}', '{product.Title}', '{product.Description}', '{product.Quantity}', '{product.CustomerId}', '{product.ProductTypeId}');
+                ('{product.Price}', '{product.Title}', '{product.Description}', '{product.Quantity}', '{product.CustomerId}', '{product.ProductTypeId}');
                  select MAX(ProductId) from Product;";
 
             using (IDbConnection conn = Connection)
@@ -90,7 +90,14 @@ namespace BangazonAPI.Controllers
         {
             string sql = $@"
             UPDATE Product
-            SET Title = '{product.Title}'
+            SET Price = '{product.Price}',
+                        Title = '{product.Title}',
+                        Description = '{product.Description}',
+                        CustomerId = '{product.CustomerId}',
+                        Quantity = '{product.Quantity}',
+                        ProductTypeId = '{product.ProductTypeId}'
+
+                        
             WHERE productId = {id}";
 
             try
@@ -119,10 +126,14 @@ namespace BangazonAPI.Controllers
             }
         }
 
-        private bool ProductExists(int id)
-        {
-            throw new NotImplementedException();
-        }
+    private bool ProductExists(int id)
+    {
+            string sql = "SELECT * FROM PProduct WHERE ProductId = {id}";
+            using (IDbConnection conn = Connection)
+            {
+                return conn.Query<Product>(sql).Count() > 0;
+            }
+      }
 
         // DELETE Product/2
         [HttpDelete("{id}")]
