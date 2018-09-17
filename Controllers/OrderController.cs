@@ -1,4 +1,8 @@
-﻿using System;
+﻿//Author: William K. Kimball
+//Purpose: Allow a user to communicate with the Bangazon database to GET PUT POST and DELETE entries, and filter certain things via query string paramaters
+//Methods: GET PUT POST DELETE
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -64,7 +68,7 @@ namespace BangazonAPI.Controllers
                 {
                         sql += $" JOIN Customer as Cust ON [Order].CustomerId = Cust.CustomerId";
                         fullOrder = await conn.QueryAsync<Order, Customer, Order>(
-                            sql, (b, c) => { b.Customer = c; return b; }, splitOn: "OrderId, CustomerId");
+                            sql, (order, c) => { order.Customer = c; return order; }, splitOn: "OrderId, CustomerId");
                     return Ok(fullOrder);
                 }
 
@@ -83,7 +87,10 @@ namespace BangazonAPI.Controllers
                     return Ok(fullOrder);
                 }
 
-
+                    if (completed == null && _include == null)
+                {
+                    return Ok(fullOrder);
+                }
                 return Ok();
 
             };
