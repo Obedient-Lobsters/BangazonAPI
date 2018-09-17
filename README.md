@@ -26,7 +26,7 @@ http methods supported: GET, POST, PUT example body:
 ### 5. Product Type
 Use the command ```dotnet run``` to start the program, BangazonAPI. Once the program is running, open up the Postman desktop app and run the following commands for each request method:
 
-**GET**
+##### GET
 
 To GET all product types, select GET in Postman then paste ```localhost:5000/producttype``` into the field and click send. The result should be an array of all the ProductTypes in the database that should look like:
 ```
@@ -56,7 +56,7 @@ To GET a specific, single product type, add an /{id} to the end of the ```localh
 ]
 ```
 
-**POST**
+##### POST
 
 To POST a new object to your existing array for Product Type, select POST, then paste ```localhost:5000/producttype``` into the field. Then click Body underneath the field, select raw, and then paste this below snippet or make one similar then click send. The result should be the new ProductType you made:
 ```
@@ -65,7 +65,7 @@ To POST a new object to your existing array for Product Type, select POST, then 
 }
 ```
 
-**PUT**
+##### PUT
 
 To update an existing product type, select PUT then paste ```localhost:5000/producttype/6``` or any other existing ProductTypeId. Then follow the same directions as the POST example, and change the values then click send: 
 ```
@@ -75,7 +75,7 @@ To update an existing product type, select PUT then paste ```localhost:5000/prod
 ```
 You should get nothing back from this besides an OK status. When you run the GET query the computer you specified in your PUT query should show the updated, edited information you gave it.
 
-**DELETE**
+##### DELETE
 
 To DELETE an existing product type, select DELETE then paste ```localhost:5000/producttype/6``` or any other existing ProductTypeId then click send. You should get nothing back from this besides an OK status. When you run the GET query the product type with the Id you specified in your DELETE query should no longer exist.
 
