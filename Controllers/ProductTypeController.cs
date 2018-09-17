@@ -1,4 +1,7 @@
-﻿using System;
+﻿//Author: Leah Gwin
+//Purpose: Controller for ProductType table
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -33,6 +36,7 @@ namespace BangazonAPI.Controllers
         }
 
         // GET /producttype
+        //This GET method will retrieve the information from the database for ProductType
         [HttpGet]
         public async Task<IActionResult> Get()
         {
@@ -47,6 +51,7 @@ namespace BangazonAPI.Controllers
         }
 
         // GET: ProductType/2
+        //This GET method will retrieve the information from the database for a singular ID of ProductType
         [HttpGet("{id}", Name = "GetProductType")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
@@ -60,6 +65,7 @@ namespace BangazonAPI.Controllers
 
 
         // POST producttype/POST
+        //This POST method will create a new entity for ProductType
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] ProductType value)
         {
@@ -78,6 +84,7 @@ namespace BangazonAPI.Controllers
         }
 
         // PUT producttype/5
+        //This PUT method will edit an existing entity for ProductType by ID
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromRoute] int id, [FromBody] ProductType value)
         {
@@ -110,9 +117,9 @@ namespace BangazonAPI.Controllers
                 }
             }
         }
-    
 
         // DELETE ProductType/5
+        //This DELETE method will delete an existing entity for ProductType by ID
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
