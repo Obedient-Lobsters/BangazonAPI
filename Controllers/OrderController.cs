@@ -35,6 +35,7 @@ namespace BangazonAPI.Controllers
             }
         }
         // GET order
+        // to GET include the customer
         [HttpGet]
         public async Task<IActionResult> Get(string _include, string completed)
         {
@@ -101,7 +102,7 @@ namespace BangazonAPI.Controllers
   
 
         // GET order/5
-        [HttpGet("{id}")]
+        [HttpGet("{id}", Name = "GetOrder")]
         public async Task<IActionResult> Get([FromRoute] int id)
         {
             using (IDbConnection conn = Connection)
