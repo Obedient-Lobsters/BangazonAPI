@@ -36,7 +36,7 @@ namespace BangazonAPI.Controllers
         //{
         //    using (IDbConnection conn = Connection)
         //    {
-        //        string sql = "SELECT * FROM [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId JOIN CustomerPayment ON [Order].CustomerPaymentId = CustomerPayment.CustomerPaymentId";
+        //        string sql = "Select * from [Order] JOIN Customer ON [Order].CustomerId = Customer.CustomerId";
         //        var fullOrder = await conn.QueryAsync<Order>(sql);
         //        if (_include != null)
         //        {
