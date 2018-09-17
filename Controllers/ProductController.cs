@@ -95,7 +95,7 @@ namespace BangazonAPI.Controllers
                 Description = '{product.Description}',
                 CustomerId = '{product.CustomerId}',
                 Quantity = '{product.Quantity}',
-                ProductTypeId = '{product.ProductTypeId}',
+                ProductTypeId = '{product.ProductTypeId}'
 
                         
             WHERE productId = {id}";
@@ -109,7 +109,7 @@ namespace BangazonAPI.Controllers
                     {
                         return new StatusCodeResult(StatusCodes.Status204NoContent);
                     }
-                    throw new Exception("No rows were affected");
+                    throw new Exception("No rows affected");
                 }
 
             }
@@ -128,8 +128,8 @@ namespace BangazonAPI.Controllers
     }
 
             private bool ProductExists(int id)
-            { 
-            string sql = "SELECT * FROM Product WHERE ProductId = {id}";
+            {
+            string sql = $"SELECT ProductId FROM [Product] WHERE ProductId = {id}";
             using (IDbConnection conn = Connection)
             {
                 return conn.Query<Product>(sql).Count() > 0;
