@@ -265,3 +265,79 @@ You should get nothing back from this besides an OK status. When you run the GET
 
 To DELETE an existing product type, select DELETE then paste ```localhost:5000/producttype/6``` or any other existing ProductTypeId then click send. You should get nothing back from this besides an OK status. When you run the GET query the product type with the Id you specified in your DELETE query should no longer exist.
 
+#### 5. Product 
+Use the command dotnet run to start the program, BangazonAPI. Once the program is running, open up the Postman desktop app and run the following commands for each request method:
+
+##### GET
+To GET all products, select GET in Postman then paste localhost:5000/Product into the field and click send. The result should be an array of all the Products in the database that should look like:
+```
+[
+  {
+"price": 43.34,
+"title": 'details',
+"description": 'more details',
+"customerId": 1,
+"quantity": 3,
+"productTypeId": 1 
+  },
+  {
+"price": 66.84,
+"title": 'words',
+"description": 'english',
+"customerId": 2, 
+"quantity": 7,
+"productTypeId": 2 
+  },
+  {
+"price": 44.44,
+"title": 'stuff',
+"description": 'and things',
+"customerId": 9,
+"quantity": 3,
+"productTypeId": 3
+  }
+]
+```
+To GET a specific, single product, add an /{id} to the end of the localhost:5000/Product URL. The result should only include the single product type with the Id you added like the below:
+```
+[
+  {
+"price": 46.11,
+"title": 'say',
+"description": 'what',
+"customerId": 5,
+"quantity": 1,
+"productTypeId": 5 
+  }
+]
+```
+### POST
+To POST a new object to your existing array for Product, select POST, then paste localhost:5000/Product into the field. Then click Body underneath the field, select raw, and then paste this below snippet or make one similar then click send. The result should be the new Product you made:
+```
+ {
+"price": 32.23,
+"title": 'glad',
+"description": 'happy',
+"customerId": 8,
+"quantity": 48,
+"productTypeId": 8
+  }
+  ```
+### PUT
+To update an existing product, select PUT then paste localhost:5000/Product/6 or any other existing ProductId. Then follow the same directions as the POST example, and change the values then click send:
+```
+  {
+"price": 22.23,
+"title": 'glad',
+"description": 'mad',
+"customerId": 8,
+"quantity": 49,
+"productTypeId": 8
+  }
+```
+You should get nothing back from this besides an OK status. When you run the GET query the computer you specified in your PUT query should show the updated, edited information you gave it.
+
+### DELETE
+To DELETE an existing product, select DELETE then paste localhost:5000/Product/6 or any other existing ProductId then click send. You should get nothing back from this besides an OK status. When you run the GET query the product with the Id you specified in your DELETE query should no longer exist.
+
+
