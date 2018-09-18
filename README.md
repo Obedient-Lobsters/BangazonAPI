@@ -31,7 +31,7 @@ Start the program by cd'ing into the BangazonAPI and using the command `dotnet r
 
 - select `GET` then paste `http://localhost:5000/customer?_include=products` into the field and click send. The result should be an array of all the customers in the database with all of the products types included in that customers as well.
 
-- select `GET` then paste `http://localhost:5000/customer?q=s` into the field and click send. The result should be an array of all the customers in the database with first or last names that start with s.
+- select `GET` then paste `http://localhost:5000/customer?q=sat` into the field and click send. The result should be an array of all the customers in the database with first or last names that contains sat.
 
 - select ```GET``` then paste ```localhost:5000/customer/1``` or any other number that showed up in the previous query as CustomerId and click send. The result should be only that object of the specified Customer
 
