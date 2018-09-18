@@ -1,5 +1,5 @@
 ﻿//Author: William K. Kimball
-//Purpose: Allow a user to communicate with the Bangazon database to GET PUT POST and DELETE entries, and filter certain things via query string paramaters
+//Purpose: Allow a user to communicate with the Bangazon database to GET PUT POST and DELETE [Order] entries, and filter certain things via query string paramaters
 //Methods: GET PUT POST DELETE
 
 using System;
