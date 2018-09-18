@@ -40,16 +40,23 @@ namespace BangazonAPI.Controllers
 
         //   GET /TrainingProgram?_include=employees
         [HttpGet]
-        public async Task<IActionResult> Get(string _include)
+        public async Task<IActionResult> Get(string _include, string completed)
         {
             using (IDbConnection conn = Connection)
             {
-                string sql = "Select * FROM TrainingProgram";
+
+                string sql = "Select * from TrainingProgram JOIN EmployeeTraining ON TrainingProgram.TrainingProgramId = EmployeeTraining.EmployeeTrainingId";
+                // var fullTrainingProgram = await conn.QueryAsync<Order>(sql);
+                // string sql = "Select * FROM TrainingProgram";
 
                 if (_include != null && _include.Contains("employee"))
                 {
+                    sql = $"Select * FROM TrainingProgram " +
+                        $"JOIN EmployeeTraining ON TrainingProgram.TrainingProgramId = EmployeeTraining.TrainingProgramId " +
+                        $"JOIN Employee ON EmployeeTraining.EmployeeId = Employee.EmployeeId ";
+                   
 
-                    sql = $" Select * FROM TrainingProgram JOIN Employee ON TrainingProgram.TrainingProgramId = Employee.TrainingProgramId";
+
                     Dictionary<int, TrainingProgram> report = new Dictionary<int, TrainingProgram>();
                     var fullTrainingProgram = await conn.QueryAsync<TrainingProgram, Employee, TrainingProgram>(
                     sql, (TrainingProgram, employee) =>
@@ -64,12 +71,13 @@ namespace BangazonAPI.Controllers
                         // Add the Employees to the current TrainingProgram entry in Dictionary
                         report[TrainingProgram.TrainingProgramId].Employees.Add(employee);
                         return TrainingProgram;
-                    }, splitOn: "TrainingProgramId, EmployeeId"
+                    }, splitOn: "TrainingProgramId"
                         );
                     return Ok(report.Values);
                 }
 
-                
+               
+
                 var trainingPrograms = await conn.QueryAsync<TrainingProgram>(sql);
                 return Ok(trainingPrograms);
             }
