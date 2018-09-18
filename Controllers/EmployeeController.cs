@@ -31,53 +31,104 @@ namespace BangazonAPI.Controllers
 			}
 		}
 
-		// GET /computer
+		// GET /employee
 		[HttpGet]
 		public async Task<IActionResult> Get()
 		{
-			string sql = $"SELECT * FROM Employee";
-
+			string sql;
+			sql = "SELECT * FROM Employee LEFT JOIN Department ON Employee.DepartmentId = Department.DepartmentId ";
+			sql += "LEFT JOIN Department as d ON Employee.DepartmentId = d.DepartmentId ";
+			sql += "LEFT JOIN EmployeeComputer as ec ON Employee.EmployeeId = ec.EmployeeId ";
+			sql += "LEFT JOIN Computer as c ON ec.ComputerId = c.ComputerId ";
 			using (IDbConnection conn = Connection)
 			{
-				IEnumerable<Employee> employees = await conn.QueryAsync<Employee>(sql);
+				IEnumerable<Employee> employees = await conn.QueryAsync<Employee, Department, Computer, Employee>(sql, (e, d, c) => { e.Department = d; e.Computer = c; return e; }, splitOn:"EmployeeId, DepartmentId, ComputerId");
 				return Ok(employees);
 			}
 		}
 
-		// GET /computer/5
+		// GET /employee/5
 		[HttpGet("{id}", Name = "GetEmployee")]
 		public async Task<IActionResult> Get([FromRoute]int id)
 		{
 			string sql;
-			//string sql = $"select e.EmployeeId, e.FirstName, e.LastName, e.Email, e.Supervisor, e.DepartmentId, d.DepartmentName, d.ExpenseBudget, c.ComputerId, c.DatePurchased, c.DateDecommissioned, c.Working, c.ModelName, c.Manufacturer from Employee e join Department d on e.DepartmentId = d.DepartmentId join EmployeeComputer ec on e.EmployeeId = ec.EmployeeId join Computer c on c.ComputerId = ec.ComputerId where e.EmployeeId = {id};";
-			sql = "SELECT * FROM Employee JOIN Department ON Employee.DepartmentId = Department.DepartmentId ";
-			sql += "JOIN Department as d ON Employee.DepartmentId = d.DepartmentId ";
+			sql = "SELECT * FROM Employee LEFT JOIN Department ON Employee.DepartmentId = Department.DepartmentId ";
+			sql += "LEFT JOIN Department as d ON Employee.DepartmentId = d.DepartmentId ";
+			sql += "LEFT JOIN EmployeeComputer as ec ON Employee.EmployeeId = ec.EmployeeId ";
+			sql += "LEFT JOIN Computer as c ON ec.ComputerId = c.ComputerId ";
 			sql += $" WHERE Employee.EmployeeId = {id}";
 			using (IDbConnection conn = Connection)
 			{
-				Employee SingleEmployee = (await conn.QueryAsync<Employee, Department, Employee>(sql, (e, d) => { e.Department = d; return e; }, splitOn:"EmployeeId, DepartmentId")).Single();
+				Employee SingleEmployee = (await conn.QueryAsync<Employee, Department, Computer, Employee>(sql, (e, d, c) => { e.Department = d; e.Computer = c; return e; }, splitOn:"EmployeeId, DepartmentId, ComputerId")).Single();
 				return Ok(SingleEmployee);
 			}
 		}
 
 
-		// POST /computer
+		// POST /employee
 		[HttpPost]
 		public async Task<IActionResult> Post([FromBody] Employee employee)
 		{
-
-			//DateDecommissioned defaults to a date in the database even when null is passed in
+			
 			string sql = $@"INSERT INTO Employee
             (FirstName, LastName, Email, Supervisor, DepartmentId)
             VALUES
             ('{employee.FirstName}', '{employee.LastName}', '{employee.Email}', '{(employee.Supervisor ? 1 : 0)}', '{employee.DepartmentId}');
-            select MAX(EmployeeId) from Computer;";
+            select MAX(EmployeeId) from Employee;";
 
 			using (IDbConnection conn = Connection)
 			{
 				var employeeId = (await conn.QueryAsync<int>(sql)).Single();
 				employee.EmployeeId = employeeId;
 				return CreatedAtRoute("GetEmployee", new { id = employeeId }, employee);
+			}
+		}
+
+
+		// PUT /employee/5
+		[HttpPut("{id}")]
+		public async Task<IActionResult> ChangeEmployee([FromRoute]int id, [FromBody] Employee employee)
+		{
+			string sql = $@"
+            UPDATE Employee
+            SET FirstName = '{employee.FirstName}',
+				LastName = '{employee.LastName}',
+				Email = '{employee.Email}',
+				Supervisor = '{employee.Supervisor}',
+				DepartmentId = '{employee.DepartmentId}'
+            WHERE EmployeeId = {id}";
+
+			try
+			{
+				using (IDbConnection conn = Connection)
+				{
+					int rowsAffected = await conn.ExecuteAsync(sql);
+					if (rowsAffected > 0)
+					{
+						return new StatusCodeResult(StatusCodes.Status204NoContent);
+					}
+					throw new Exception("No rows affected");
+				}
+			}
+			catch (Exception)
+			{
+				if (!EmployeeExists(id))
+				{
+					return NotFound();
+				}
+				else
+				{
+					throw;
+				}
+			}
+		}
+
+		private bool EmployeeExists(int id)
+		{
+			string sql = $"SELECT * FROM Employee WHERE EmployeeId = {id}";
+			using (IDbConnection conn = Connection)
+			{
+				return conn.Query<Employee>(sql).Count() > 0;
 			}
 		}
 
