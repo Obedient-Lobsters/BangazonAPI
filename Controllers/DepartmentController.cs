@@ -42,6 +42,7 @@ namespace BangazonAPI.Controllers
                 {
 
                     sql = $" Select DepartmentId, DepartmentName, ExpenseBudget FROM Department JOIN Employee ON Department.DepartmentId = Employee.DepartmentId";
+
                     Dictionary<int, Department> report = new Dictionary<int, Department>();
                     var fullDep = await conn.QueryAsync<Department, Employee, Department>(
                     sql, (department, employee) =>
