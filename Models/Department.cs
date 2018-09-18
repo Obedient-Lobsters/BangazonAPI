@@ -15,6 +15,7 @@ namespace BangazonAPI.Models
         public string DepartmentName { get; set; }
         public int ExpenseBudget { get; set; }
 
-        IEnumerable<Employee> Employees;
+        public List<Employee> Employees { get; set; } = new List<Employee>();
+  
     }
 }
