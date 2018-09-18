@@ -1,4 +1,12 @@
-﻿using Dapper;
+﻿//Author: Jordan W. Williams
+//Purpose: Allow a user to communicate with the Bangazon database to GET PUT POST and DELETE entries.
+//Methods: GET PUT POST
+
+
+
+
+
+using Dapper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
