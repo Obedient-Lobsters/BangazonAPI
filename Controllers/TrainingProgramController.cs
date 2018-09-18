@@ -40,7 +40,7 @@ namespace BangazonAPI.Controllers
 
         //   GET /TrainingProgram?_include=employees
         [HttpGet]
-        public async Task<IActionResult> Get(string _include, string _budget, int _gt)
+        public async Task<IActionResult> Get(string _include)
         {
             using (IDbConnection conn = Connection)
             {
@@ -64,13 +64,13 @@ namespace BangazonAPI.Controllers
                         // Add the Employees to the current TrainingProgram entry in Dictionary
                         report[TrainingProgram.TrainingProgramId].Employees.Add(employee);
                         return TrainingProgram;
-                    }, splitOn: "DepartmentId, EmployeeId"
+                    }, splitOn: "TrainingProgramId, EmployeeId"
                         );
                     return Ok(report.Values);
                 }
 
                 
-                var trainingPrograms = await conn.QueryAsync<Department>(sql);
+                var trainingPrograms = await conn.QueryAsync<TrainingProgram>(sql);
                 return Ok(trainingPrograms);
             }
         }
