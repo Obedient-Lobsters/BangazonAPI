@@ -79,3 +79,113 @@ You should get nothing back from this besides an OK status. When you run the GET
  To DELETE an existing product type, select DELETE then paste ```localhost:5000/order/2``` or any other existing Order then click send. You should get nothing back from this besides an OK status. When you run the GET query the order with the Id you specified in your DELETE query should no longer exist.
 ###Employees
 http methods supported: GET, POST, PUT example body:
+
+### 6. Employee 
+Use the command ```dotnet run``` to start the program, BangazonAPI. Once the program is running, open up the Postman desktop app and run the following commands for each request method:
+ ##### GET
+ To GET all employees, select GET in Postman then paste ```localhost:5000/employee``` into the field and click send. The result should be an array of all the Employees in the database that should look like:
+```
+[
+    {
+        "employeeId": 1,
+        "firstName": "William",
+        "lastName": "Kimball",
+        "email": "wkkimball043@gmail.com",
+        "supervisor": true,
+        "departmentId": 1,
+        "department": {
+            "departmentId": 1,
+            "departmentName": "CodeRockstars",
+            "expenseBudget": 140234,
+            "employees": []
+        },
+        "computer": null
+    },
+    {
+        "employeeId": 2,
+        "firstName": "Robert",
+        "lastName": "Leedy",
+        "email": "rleedy@gmail.com",
+        "supervisor": false,
+        "departmentId": 2,
+        "department": {
+            "departmentId": 2,
+            "departmentName": "IT",
+            "expenseBudget": 23400,
+            "employees": []
+        },
+        "computer": {
+            "computerId": 1,
+            "datePurchased": "2017-10-11T00:00:00",
+            "dateDecommissioned": null,
+            "working": true,
+            "modelName": "XPS",
+            "manufacturer": "Dell"
+        }
+    },
+    {
+        "employeeId": 3,
+        "firstName": "Seth",
+        "lastName": "Dana",
+        "email": "sd@gmail.com",
+        "supervisor": false,
+        "departmentId": 3,
+        "department": {
+            "departmentId": 3,
+            "departmentName": "Sales",
+            "expenseBudget": 24000,
+            "employees": []
+        },
+        "computer": {
+            "computerId": 3,
+            "datePurchased": "2018-12-11T00:00:00",
+            "dateDecommissioned": null,
+            "working": true,
+            "modelName": "Pro",
+            "manufacturer": "Mac"
+        }
+    }
+]
+```
+ To GET a specific, single order, add an /{id} to the end of the ```localhost:5000/employee``` URL. The result should only include the single employee with the Id you added like the below:  
+```
+{
+    "employeeId": 1,
+    "firstName": "William",
+    "lastName": "Kimball",
+    "email": "wkkimball043@gmail.com",
+    "supervisor": true,
+    "departmentId": 1,
+    "department": {
+        "departmentId": 1,
+        "departmentName": "CodeRockstars",
+        "expenseBudget": 140234,
+        "employees": []
+    },
+    "computer": null
+}
+```
+ ##### POST
+ To POST a new object to your existing array for Employee, select POST, then paste ```localhost:5000/employee``` into the field. Then click Body underneath the field, select raw, and then paste this below snippet or make one similar then click send. The result should be the new Employee you made:
+```
+{
+	"FirstName": "Example",
+	"LastName": "Person",
+	"Email": "fakeemail@thingy.com",
+	"Supervisor": true,
+	"DepartmentId": 2
+}
+```
+ ##### PUT
+ To update an existing employee, select PUT then paste ```localhost:5000/employee/2``` or any other existing employee. Then follow the same directions as the POST example, and change the values then click send: 
+```
+{
+"employeeId": 2,
+    "firstName": "Jack",
+    "lastName": "Bob",
+    "email": "jackbob@gmail.com",
+    "supervisor": false,
+    "departmentId": 2,
+}
+```
+You should get nothing back from this besides an OK status. When you run the GET query the employee you specified in your PUT query should show the updated, edited information you gave it.
