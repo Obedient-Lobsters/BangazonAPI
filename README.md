@@ -338,6 +338,6 @@ To update an existing product, select PUT then paste localhost:5000/Product/6 or
 You should get nothing back from this besides an OK status. When you run the GET query the computer you specified in your PUT query should show the updated, edited information you gave it.
 
 DELETE
-To DELETE an existing product type, select DELETE then paste localhost:5000/Product/6 or any other existing ProductId then click send. You should get nothing back from this besides an OK status. When you run the GET query the product with the Id you specified in your DELETE query should no longer exist.
+To DELETE an existing product, select DELETE then paste localhost:5000/Product/6 or any other existing ProductId then click send. You should get nothing back from this besides an OK status. When you run the GET query the product with the Id you specified in your DELETE query should no longer exist.
 
 
