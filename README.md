@@ -22,6 +22,54 @@ then replace ```INSERT_DATABASE_NAME``` with the name of your database that you'
 
 ### Http Request Methods
 
+### 3. PaymentType
+Use the command ```dotnet run``` to start the program, BangazonAPI. Once the program is running, open up the Postman desktop app and run the following commands for each request method:
+ ##### GET
+ To GET all product types, select GET in Postman then paste ```localhost:5000/PaymentType``` into the field and click send. The result should be an array of all the payment type in the database that should look like:
+ ```
+ [
+  {
+    "paymentTypeId": 1,
+    "paymentTypeName": "Visa"
+  },
+  {
+    "paymentTypeId": 2,
+    "paymentTypeName": "MasterCard"
+  },
+  {
+    "paymentTypeId": 3,
+    "paymentTypeName": "Discover"
+  }
+ ]
+ ```
+ To GET a specific, single payment type, add an /{id} to the end of the ```localhost:5000/PaymentType``` URL. The result should only include the single payment type with the Id you added like the below:  
+```
+[
+  {
+    "paymentTypeId": 1,
+    "paymentTypeName": "Visa"
+  }
+]
+```
+ ##### POST
+ To POST a new object to your existing array for PaymentType, select POST, then paste ```localhost:5000/PaymentType``` into the field. Then click Body underneath the field, select raw, and then paste this below snippet or make one similar then click send. The result should be the new PaymentType you made:
+```
+{
+	"paymentTypeName": "New Value"
+}
+```
+##### PUT
+ To update an existing PaymentType, select PUT then paste ```localhost:5000/paymentType/2``` or any other existing order. Then follow the same directions as the POST example, and change the values then click send: 
+```
+{
+	"paymentTypeName": "New Value"
+}
+```
+You should get nothing back from this besides an OK status. When you run the GET query the computer you specified in your PUT query should show the updated, edited information you gave it.
+ 
+ ##### DELETE
+ To DELETE an existing product type, select DELETE then paste ```localhost:5000/PaymentType/2``` or any other existing PaymentType then click send. You should get nothing back from this besides an OK status. When you run the GET query the order with the Id you specified in your DELETE query should no longer exist.
+
 ### 4. Order 
 Use the command ```dotnet run``` to start the program, BangazonAPI. Once the program is running, open up the Postman desktop app and run the following commands for each request method:
  ##### GET
