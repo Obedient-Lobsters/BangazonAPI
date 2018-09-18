@@ -1,6 +1,6 @@
 ﻿//Author: Jordan W. Williams
 //Purpose: Allow a user to communicate with the Bangazon database to GET PUT POST and DELETE entries.
-//Methods: GET PUT POST DELETE
+//Methods: GET PUT(id) POST DELETE(id)
 
 
 
@@ -71,7 +71,6 @@ namespace BangazonAPI.Controllers
 		public async Task<IActionResult> Post([FromBody] Computer computer)
 		{
 
-			//DateDecommissioned defaults to a date in the database even when null is passed in
 			string sql = $@"INSERT INTO Computer
             (DatePurchased, DateDecommissioned, Working, ModelName, Manufacturer)
             VALUES
