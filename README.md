@@ -37,7 +37,8 @@ Start the program by cd'ing into the BangazonAPI and using the command `dotnet r
 
 #### POST
 select ```POST```, then paste ```localhost:5000/customer``` into the field, then click Body underneath the field, then select raw, and then paste this snippet or make one similar 
-```  {
+```
+{
         "FirstName": "Test",
         "LastName": "Instructions",
         "Email": "PullRequest@gmail.com",
