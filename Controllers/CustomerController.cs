@@ -75,7 +75,7 @@ namespace BangazonAPI.Controllers
                             customerPayments[customer.CustomerId].Payments.Add(paymentType);
                             return customer;
                         },
-                        splitOn: "CustomerId");
+                        splitOn: "CustomerId, PaymentTypeId");
                     return Ok(customerPayments);
                 }
                 //include products
@@ -98,7 +98,7 @@ namespace BangazonAPI.Controllers
                             customerProduct[customer.CustomerId].Products.Add(product);
                             return customer;
                         },
-                       splitOn: "CustomerId");
+                       splitOn: "CustomerId, ProductId");
                     return Ok(customerProduct);
                 }
 
