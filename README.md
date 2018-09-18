@@ -22,7 +22,7 @@ then replace ```INSERT_DATABASE_NAME``` with the name of your database that you'
 ### 4. Order 
 Use the command ```dotnet run``` to start the program, BangazonAPI. Once the program is running, open up the Postman desktop app and run the following commands for each request method:
  ##### GET
- To GET all product types, select GET in Postman then paste ```localhost:5000/order``` into the field and click send. The result should be an array of all the Orders in the database that should look like:
+ To GET all Orders, select GET in Postman then paste ```localhost:5000/order``` into the field and click send. The result should be an array of all the Orders in the database that should look like:
 ```
 [
     {
@@ -74,8 +74,66 @@ Use the command ```dotnet run``` to start the program, BangazonAPI. Once the pro
 "CustomerPaymentId":"NewUpdatedId"
 }
 ```
-You should get nothing back from this besides an OK status. When you run the GET query the computer you specified in your PUT query should show the updated, edited information you gave it.
+You should get nothing back from this besides an OK status. When you run the GET query the Order you specified in your PUT query should show the updated, edited information you gave it.
  ##### DELETE
- To DELETE an existing product type, select DELETE then paste ```localhost:5000/order/2``` or any other existing Order then click send. You should get nothing back from this besides an OK status. When you run the GET query the order with the Id you specified in your DELETE query should no longer exist.
+ To DELETE an existing department, select DELETE then paste ```localhost:5000/order/2``` or any other existing Order then click send. You should get nothing back from this besides an OK status. When you run the GET query the order with the Id you specified in your DELETE query should no longer exist.
+
+### 7. Department 
+Use the command ```dotnet run``` to start the program, BangazonAPI. Once the program is running, open up the Postman desktop app and run the following commands for each request method:
+ ##### GET
+ To GET all Departments, select GET in Postman then paste ```localhost:5000/department``` into the field and click send. The result should be an array of all the Departments in the database that should look like:
+```
+[
+    {
+        "departmentId": 1,
+        "departmentName": "CodeRockstars",
+        "expenseBudget": 140234,
+        "employees": []
+    },
+    {
+        "departmentId": 2,
+        "departmentName": "IT",
+        "expenseBudget": 23400,
+        "employees": []
+    },
+    {
+        "departmentId": 3,
+        "departmentName": "Sales",
+        "expenseBudget": 24000,
+        "employees": []
+    }
+]
+```
+ To GET a specific, single Department, add an /{id} to the end of the ```localhost:5000/department``` URL. The result should only include the single department with the Id you added like the below:  
+```
+[
+    {
+        "departmentId": 3,
+        "departmentName": "Sales",
+        "expenseBudget": 24000,
+        "employees": []
+    }
+]
+```
+ ##### POST
+ To POST a new object to your existing array for Department, select POST, then paste ```localhost:5000/department``` into the field. Then click Body underneath the field, select raw, and then paste this below snippet or make one similar then click send. The result should be the new Department you made:
+```
+    {
+        "DepartmentName": "Test",
+        "ExpenseBudget": "300000"
+    }
+```
+ ##### PUT
+ To update an existing Department, select PUT then paste ```localhost:5000/Department/2``` or any other existing department. Then follow the same directions as the POST example, and change the values then click send: 
+```
+{
+"DepartmentName":"NewDepartmentName",
+"DepartmentName":"234234"
+}
+```
+You should get nothing back from this besides an OK status. When you run the GET query the Department you specified in your PUT query should show the updated, edited information you gave it.
+ ##### DELETE
+ To DELETE an existing Department, select DELETE then paste ```localhost:5000/department/2``` or any other existing Department then click send. You should get nothing back from this besides an OK status. When you run the GET query the order with the Id you specified in your DELETE query should no longer exist.
+
 ###Employees
 http methods supported: GET, POST, PUT example body:
