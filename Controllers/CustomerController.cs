@@ -33,10 +33,8 @@ namespace BangazonAPI.Controllers
             }
         }
 
-        /*
-            GET /customers?q=test
-            GET /customers?_include=payments
-         */
+       //This GET method allows user to GET all items in database, Query first and last name with ?q
+       //get a list with ?_include=payments and ?_include=products
         [HttpGet]
         public async Task<IActionResult> GET(string q, string _include)
         {
@@ -49,12 +47,12 @@ namespace BangazonAPI.Controllers
                 {
                     _include = "";
                 }
-
+                //query name
                 if (q != null)
                 {
                     sql += $" WHERE 1=1 AND FirstName LIKE '%{q}%' OR LastName LIKE '%{q}%'";
                 }
-
+                //include payments
                 if (_include != null && _include.Contains("payments"))
                 {
                     var fullCustomer = await conn.QueryAsync<Customer>(sql);
@@ -73,13 +71,14 @@ namespace BangazonAPI.Controllers
                                 customerPayments[customer.CustomerId] = customer;
                             }
 
-                            // Add the product to the current Product entry in Dictionary
+                            // Add the payment to the current PaymentType entry in Dictionary
                             customerPayments[customer.CustomerId].Payments.Add(paymentType);
                             return customer;
                         },
                         splitOn: "CustomerId");
                     return Ok(customerPayments);
                 }
+                //include products
                 if (_include != null && _include.Contains("products"))
                 {
                     var fullCustomerProd = await conn.QueryAsync<Customer>(sql);
@@ -110,6 +109,7 @@ namespace BangazonAPI.Controllers
         }
 
                 // GET /customers/5
+                //This GET method allows user to Get One item, accepts id taken from route
         [HttpGet("{id}", Name = "GetCustomer")]
         public async Task<IActionResult> Get([FromRoute]int id)
         {
@@ -123,6 +123,7 @@ namespace BangazonAPI.Controllers
         }
 
         // POST /customers
+        //This POST methods allows user to post a new item to database. accepts Body on customer type of
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Customer customer)
         {
@@ -153,78 +154,57 @@ namespace BangazonAPI.Controllers
                 return CreatedAtRoute("GetCustomer", new { id = customerId }, customer);
             }
         }
+        
+        //This PUT method allows user to update an item in Database. It accepts id taken from route and Body on customer type of
+        [HttpPut("{id}")]
+        public async Task<IActionResult> ChangeCustomer(int id, [FromBody] Customer customer)
+        {
+            string sql = $@"
+                UPDATE Customer
+                SET FirstName = '{customer.FirstName}'
+                  ,LastName = '{customer.LastName}'
+                  ,Email = '{customer.Email}'
+                  ,Address = '{customer.Address}'
+                  ,City = '{customer.City}'
+                  ,State = '{customer.State}'
+                  ,AcctCreationDate = '{customer.AcctCreationDate}'
+                  ,LastLogin = '{customer.LastLogin}'
+                WHERE CustomerId = {id}";
 
-        //    /*
-        //        PUT /customers/5
-        //        The [HttpPut] attribute ensures that this method will handle any
-        //        request to a `/customers/{id}` with the PUT HTTP verb. Alternatively,
-        //        I could name this method `PutCustomer`, or just `Put` and ASP.NET
-        //        will detect that the word `Put` is in the method name and ensure
-        //        that it will only be invoke for PUT operations.
-        //        All other controllers have this method named as `Put`. It's named
-        //        differently here to show that the [HttpPut] attribute enforces which
-        //        verb is handled.
-        //     */
-        //    [HttpPut("{id}")]
-        //    public async Task<IActionResult> ChangeCustomer(int id, [FromBody] Customer customer)
-        //    {
-        //        string sql = $@"
-        //        UPDATE Customer
-        //        SET '
-        //        WHERE Id = {id}";
-
-        //        try
-        //        {
-        //            using (IDbConnection conn = Connection)
-        //            {
-        //                int rowsAffected = await conn.ExecuteAsync(sql);
-        //                if (rowsAffected > 0)
-        //                {
-        //                    return new StatusCodeResult(StatusCodes.Status204NoContent);
-        //                }
-        //                throw new Exception("No rows affected");
-        //            }
-        //        }
-        //        catch (Exception)
-        //        {
-        //            if (!CustomerExists(id))
-        //            {
-        //                return NotFound();
-        //            }
-        //            else
-        //            {
-        //                throw;
-        //            }
-        //        }
-        //    }
-
-        //    // DELETE /customers/5
-        //    [HttpDelete("{id}")]
-        //    public async Task<IActionResult> Delete(int id)
-        //    {
-        //        string sql = $@"DELETE FROM Customer WHERE Id = {id}";
-
-        //        using (IDbConnection conn = Connection)
-        //        {
-        //            int rowsAffected = await conn.ExecuteAsync(sql);
-        //            if (rowsAffected > 0)
-        //            {
-        //                return new StatusCodeResult(StatusCodes.Status204NoContent);
-        //            }
-        //            throw new Exception("No rows affected");
-        //        }
-
-        //    }
-
-        //    private bool CustomerExists(int id)
-        //    {
-        //        string sql = $"SELECT Id, Name, Language FROM Customer WHERE Id = {id}";
-        //        using (IDbConnection conn = Connection)
-        //        {
-        //            return conn.Query<Customer>(sql).Count() > 0;
-        //        }
-        //    }
-        //}
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    int rowsAffected = await conn.ExecuteAsync(sql);
+                    if (rowsAffected > 0)
+                    {
+                        return new StatusCodeResult(StatusCodes.Status204NoContent);
+                    }
+                    throw new Exception("No rows affected");
+                }
+            }
+            catch (Exception)
+            {
+                if (!CustomerExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+        //This method checks database for an existing table based on id
+        private bool CustomerExists(int id)
+        {
+            string sql = $"SELECT CustomerId, FirstName, LastName FROM Customer WHERE CustomerId = {id}";
+            using (IDbConnection conn = Connection)
+            {
+                return conn.Query<Customer>(sql).Count() > 0;
+            }
+        }
     }
-    
 }
+    
+
