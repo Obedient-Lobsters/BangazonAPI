@@ -1,6 +1,6 @@
 ﻿//Author: Jordan W. Williams
 //Purpose: Allow a user to communicate with the Bangazon database to GET PUT POST and DELETE entries.
-//Methods: GET PUT POST
+//Methods: GET PUT(id) POST
 
 
 
