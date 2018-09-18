@@ -45,7 +45,7 @@ namespace BangazonAPI.Controllers
 
             using (IDbConnection conn = Connection)
             {
-                if(_include == null)
+                if (_include == null)
                 {
                     _include = "";
                 }
@@ -57,7 +57,7 @@ namespace BangazonAPI.Controllers
 
                 if (_include != null && _include.Contains("payments"))
                 {
-                var fullCustomer = await conn.QueryAsync<Customer>(sql);
+                    var fullCustomer = await conn.QueryAsync<Customer>(sql);
 
                     sql = $@"SELECT *
                            FROM Customer c
@@ -107,13 +107,13 @@ namespace BangazonAPI.Controllers
                 return Ok(customers);
 
             }
-
+        }
 
                 // GET /customers/5
         [HttpGet("{id}", Name = "GetCustomer")]
         public async Task<IActionResult> Get([FromRoute]int id)
         {
-            string sql = $"SELECT Id, FirtName FROM Customer WHERE Id = {id}";
+            string sql = $"SELECT CustomerId, FirstName FROM Customer WHERE CustomerId = {id}";
 
             using (IDbConnection conn = Connection)
             {
@@ -122,23 +122,37 @@ namespace BangazonAPI.Controllers
             }
         }
 
-        //    // POST /customers
-        //    [HttpPost]
-        //    public async Task<IActionResult> Post([FromBody] Customer customer)
-        //    {
-        //        string sql = $@"INSERT INTO Customer
-        //        ()
-        //        VALUES
-        //        ();
-        //        select MAX(Id) from Customer;";
+        // POST /customers
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] Customer customer)
+        {
+            string sql = $@"INSERT INTO Customer
+                (FirstName
+                  ,LastName
+                  ,Email
+                  ,Address
+                  ,City
+                  ,State
+                  ,AcctCreationDate
+                  ,LastLogin)
+                VALUES
+                ('{customer.FirstName}'
+                  ,'{customer.LastName}'
+                  ,'{customer.Email}'
+                  ,'{customer.Address}'
+                  ,'{customer.City}'
+                  ,'{customer.State}'
+                  ,'{customer.AcctCreationDate}'
+                  ,'{customer.LastLogin}');
+                select MAX(CustomerId) from Customer;";
 
-        //        using (IDbConnection conn = Connection)
-        //        {
-        //            var customerId = (await conn.QueryAsync<int>(sql)).Single();
-        //            customer.Id = customerId;
-        //            return CreatedAtRoute("GetCustomer", new { id = customerId }, customer);
-        //        }
-        //    }
+            using (IDbConnection conn = Connection)
+            {
+                var customerId = (await conn.QueryAsync<int>(sql)).Single();
+                customer.CustomerId = customerId;
+                return CreatedAtRoute("GetCustomer", new { id = customerId }, customer);
+            }
+        }
 
         //    /*
         //        PUT /customers/5
@@ -212,5 +226,5 @@ namespace BangazonAPI.Controllers
         //    }
         //}
     }
-    }
+    
 }
