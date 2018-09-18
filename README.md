@@ -454,5 +454,67 @@ You should get nothing back from this besides an OK status. When you run the GET
 ### DELETE
 To DELETE an existing product, select DELETE then paste localhost:5000/Product/6 or any other existing ProductId then click send. You should get nothing back from this besides an OK status. When you run the GET query the product with the Id you specified in your DELETE query should no longer exist.
 
+### 8. Computer 
+Use the command ```dotnet run``` to start the program, BangazonAPI. Once the program is running, open up the Postman desktop app and run the following commands for each request method:
+ ##### GET
+ To GET all Computers, select GET in Postman then paste ```localhost:5000/computer``` into the field and click send. The result should be an array of all the Computers in the database that should look like:
+```
+[
+    {
+        "computerId": 1,
+        "datePurchased": "2017-10-11T00:00:00",
+        "dateDecommissioned": null,
+        "working": true,
+        "modelName": "XPS",
+        "manufacturer": "Dell"
+    },
+    {
+        "computerId": 3,
+        "datePurchased": "2018-12-11T00:00:00",
+        "dateDecommissioned": null,
+        "working": true,
+        "modelName": "Pro",
+        "manufacturer": "Mac"
+    }
+]
+```
+ To GET a specific, single computer, add an /{id} to the end of the ```localhost:5000/computer``` URL. The result should only include the single computer with the Id you added like the below:  
+```
+{
+    "computerId": 1,
+    "datePurchased": "2017-10-11T00:00:00",
+    "dateDecommissioned": null,
+    "working": true,
+    "modelName": "XPS",
+    "manufacturer": "Dell"
+}
+```
+ ##### POST
+ To POST a new object to your existing array for Computer, select POST, then paste ```localhost:5000/computer``` into the field. Then click Body underneath the field, select raw, and then paste this below snippet or make one similar then click send. The result should be the new Computer you made:
+```
+{
+    "datePurchased": "2017-10-11T00:00:00",
+    "dateDecommissioned": null,
+    "working": false,
+    "modelName": "XPS",
+    "manufacturer": "Dell"
+}
+```
+ ##### PUT
+ To update an existing computer, select PUT then paste ```localhost:5000/computer/2``` or any other existing computer. Then follow the same directions as the POST example, and change the values then click send: 
+```
+{
+    "datePurchased": "2017-10-11T00:00:00",
+    "dateDecommissioned": "2018-12-13",
+    "working": false,
+    "modelName": "XPS",
+    "manufacturer": "Dell"
+}
+```
+You should get nothing back from this besides an OK status. When you run the GET query the Computer you specified in your PUT query should show the updated, edited information you gave it.
+ ##### DELETE
+
+ To DELETE an existing Computer, select DELETE then paste ```localhost:5000/computer/2``` or any other existing Computer then click send. You should get nothing back from this besides an OK status. When you run the GET query the computer with the Id you specified in your DELETE query should no longer exist.
+
 
 
