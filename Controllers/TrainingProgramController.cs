@@ -138,9 +138,9 @@ namespace BangazonAPI.Controllers
             string sql = $@"
             UPDATE TrainingProgram
             SET 
-            ProgramName = '{value.ProgramName}'
-            StartDate = '{value.StartDate}'
-            EndDate = '{value.EndDate}'
+            ProgramName = '{value.ProgramName}',
+            StartDate = '{value.StartDate}',
+            EndDate = '{value.EndDate}',
             MaximumAttendees ='{value.MaximumAttendees}'
             WHERE TrainingProgramId = {id}";
 
@@ -168,7 +168,6 @@ namespace BangazonAPI.Controllers
                 }
             }
         }
-        //i think put is done... need to test
         private bool TrainingProgramExists(int id)
         {
             string sql = $"SELECT TrainingProgramId FROM TrainingProgram WHERE TrainingProgramId = {id}";
