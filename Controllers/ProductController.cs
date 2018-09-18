@@ -1,17 +1,14 @@
 ﻿//Author: Joey Smith
 //Purpose: Controller for Products
 
-<<<<<<< HEAD
 using System;
 using System.Data;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-=======
 using System.Data;
 using System.Threading.Tasks;
->>>>>>> 6e5dee3da666c711c557d28445ba4520a3b5830b
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Dapper;
@@ -25,13 +22,10 @@ namespace BangazonAPI.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IConfiguration _config;
-<<<<<<< HEAD
+
 
         public ProductController(IConfiguration config)
-=======
-        
-        public ProductController (IConfiguration config)
->>>>>>> 6e5dee3da666c711c557d28445ba4520a3b5830b
+
         {
             _config = config;
         }
@@ -43,11 +37,10 @@ namespace BangazonAPI.Controllers
                 return new SqlConnection(_config.GetConnectionString("DefaultConnection"));
             }
         }
-<<<<<<< HEAD
+
 
         //Get all and Get single methods displayed
-=======
->>>>>>> 6e5dee3da666c711c557d28445ba4520a3b5830b
+
         // GET All Products
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -60,7 +53,6 @@ namespace BangazonAPI.Controllers
             }
         }
 
-<<<<<<< HEAD
         //GET /Product/3
         [HttpGet("{id}", Name = "GetProduct")]
         public async Task<IActionResult> Get([FromRoute]int id)
@@ -155,7 +147,10 @@ namespace BangazonAPI.Controllers
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
         {
-            string sql = $@"DELETE FROM Product WHERE ProductId = {id}";
+            string sql = $@"DELETE FROM Product WHERE ProductId = {id} IF (OBJECT_ID('dbo.FK_ProductProductOrder', 'F') IS NOT NULL)
+                            BEGIN
+                                ALTER TABLE dbo.ProductOrder DROP CONSTRAINT FK_ProductProductOrder
+                             END DELETE FROM ProductOrder WHERE ProductId = {id}";
 
             using (IDbConnection conn = Connection)
             {
