@@ -34,7 +34,7 @@ namespace BangazonAPI.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime LastLogin { get; set; }
 
-        public IEnumerable<PaymentType> Payments;
-        public IEnumerable<Customer> Customers;
+        public List<PaymentType> Payments { get; set; } = new List<PaymentType>();
+        public List<Product> Products { get; set; } = new List<Product>();
     }
 }
