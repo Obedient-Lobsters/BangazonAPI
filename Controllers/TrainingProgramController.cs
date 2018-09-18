@@ -46,8 +46,6 @@ namespace BangazonAPI.Controllers
             {
 
                 string sql = "Select * from TrainingProgram JOIN EmployeeTraining ON TrainingProgram.TrainingProgramId = EmployeeTraining.EmployeeTrainingId";
-                // var fullTrainingProgram = await conn.QueryAsync<Order>(sql);
-                // string sql = "Select * FROM TrainingProgram";
 
                 if (_include != null && _include.Contains("employee"))
                 {
@@ -75,13 +73,43 @@ namespace BangazonAPI.Controllers
                         );
                     return Ok(report.Values);
                 }
-
-               
-
                 var trainingPrograms = await conn.QueryAsync<TrainingProgram>(sql);
                 return Ok(trainingPrograms);
             }
         }
+
+        // GET trainingprogram/2
+        [HttpGet("{id}", Name = "GetTrainingProgram")]
+        //arguments: id specifies which trainingProgram to get
+        public async Task<IActionResult> Get([FromRoute] int id)
+        {
+            using (IDbConnection conn = Connection)
+            {
+                string sql = $"Select * FROM TrainingProgram " +
+                        $"JOIN EmployeeTraining ON TrainingProgram.TrainingProgramId = EmployeeTraining.TrainingProgramId " +
+                        $"JOIN Employee ON EmployeeTraining.EmployeeId = Employee.EmployeeId " +
+                        $"WHERE TrainingProgram.TrainingProgramId = {id}";
+                Dictionary<int, TrainingProgram> report = new Dictionary<int, TrainingProgram>();
+                var SingleTrainingProgram = (await conn.QueryAsync<TrainingProgram, Employee, TrainingProgram>(
+                sql, (TrainingProgram, employee) =>
+                {
+                    // Does the Dictionary already have the key of the TrainingProgramId?
+                    if (!report.ContainsKey(TrainingProgram.TrainingProgramId))
+                    {
+                        // Create the entry in the dictionary
+                        report[TrainingProgram.TrainingProgramId] = TrainingProgram;
+                    }
+
+                    // Add the employee to the current Employee entry in Dictionary
+                    report[TrainingProgram.TrainingProgramId].Employees.Add(employee);
+                    return TrainingProgram;
+                }, splitOn: "TrainingProgramId"
+                    )).Single();
+                return Ok(report.Values);
+            }
+
+        }
+
 
 
 
