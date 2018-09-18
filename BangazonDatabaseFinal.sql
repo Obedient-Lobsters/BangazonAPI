@@ -157,7 +157,7 @@ CREATE TABLE CustomerPayment (
 CREATE TABLE [Order] (
   OrderId             INTEGER NOT NULL PRIMARY KEY IDENTITY,
   CustomerId          INTEGER NOT NULL,
-  CustomerPaymentId       INTEGER NOT NULL,
+  CustomerPaymentId       INTEGER,
   CONSTRAINT FK_CustomerOrder FOREIGN KEY(CustomerId)REFERENCES Customer(CustomerId),
   CONSTRAINT FK_CustomerPaymentOrder FOREIGN KEY(CustomerPaymentId)REFERENCES CustomerPayment(CustomerPaymentId)
 );
@@ -298,9 +298,8 @@ INSERT INTO [Order](CustomerPaymentId,CustomerId)
 VALUES(
 2,
 2);
-INSERT INTO [Order](CustomerPaymentId,CustomerId)
+INSERT INTO [Order](CustomerId)
 VALUES(
-1,
 1);
 INSERT INTO Product(Price,Title,Description,Quantity,CustomerId,ProductTypeId)
 VALUES(
