@@ -36,8 +36,8 @@ Start the program by cd'ing into the BangazonAPI and using the command `dotnet r
 - select ```GET``` then paste ```localhost:5000/customer/1``` or any other number that showed up in the previous query as CustomerId and click send. The result should be only that object of the specified Customer
 
 #### POST
-- select ```POST```, then paste ```localhost:5000/customer``` into the field, then click Body underneath the field, then select raw, and then paste this snippet or make one similar 
-`   {
+select ```POST```, then paste ```localhost:5000/customer``` into the field, then click Body underneath the field, then select raw, and then paste this snippet or make one similar 
+```  {
         "FirstName": "Test",
         "LastName": "Instructions",
         "Email": "PullRequest@gmail.com",
@@ -47,12 +47,12 @@ Start the program by cd'ing into the BangazonAPI and using the command `dotnet r
         "AcctCreationDate": "2018-09-18",
         "LastLogin": "2018-09-18"
     }
-`
+```
 then click send. The result should be the new customer you made.
 
 #### PUT
-- select `PUT ` then paste` localhost:5000/customer/1` or any other `Customer Id `, then click Body underneath the field, then select raw, and then paste this snippet or make one similar 
-`
+select `PUT ` then paste` localhost:5000/customer/1` or any other `Customer Id `, then click Body underneath the field, then select raw, and then paste this snippet or make one similar 
+```
     {
         "FirstName": "Test",
         "LastName": "Instructions",
@@ -63,7 +63,7 @@ then click send. The result should be the new customer you made.
         "AcctCreationDate": "2018-09-18",
         "LastLogin": "2018-09-18"
     }
-`
+```
 You should get nothing back from this. When you run the `GET` query the Customer you specified in your `PUT` query should show the updated, edited information you gave it.
 
 ### 3. PaymentType
