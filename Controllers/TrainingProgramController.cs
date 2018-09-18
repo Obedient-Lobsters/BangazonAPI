@@ -45,13 +45,13 @@ namespace BangazonAPI.Controllers
             using (IDbConnection conn = Connection)
             {
 
-                string sql = "Select * from TrainingProgram JOIN EmployeeTraining ON TrainingProgram.TrainingProgramId = EmployeeTraining.EmployeeTrainingId";
+                string sql = "Select * from TrainingProgram LEFT JOIN EmployeeTraining ON TrainingProgram.TrainingProgramId = EmployeeTraining.EmployeeTrainingId";
 
                 if (_include != null && _include.Contains("employee"))
                 {
                     sql = $"Select * FROM TrainingProgram " +
-                        $"JOIN EmployeeTraining ON TrainingProgram.TrainingProgramId = EmployeeTraining.TrainingProgramId " +
-                        $"JOIN Employee ON EmployeeTraining.EmployeeId = Employee.EmployeeId ";
+                        $"LEFT JOIN EmployeeTraining ON TrainingProgram.TrainingProgramId = EmployeeTraining.TrainingProgramId " +
+                        $"LEFT JOIN Employee ON EmployeeTraining.EmployeeId = Employee.EmployeeId ";
                    
 
 
@@ -86,8 +86,8 @@ namespace BangazonAPI.Controllers
             using (IDbConnection conn = Connection)
             {
                 string sql = $"Select * FROM TrainingProgram " +
-                        $"JOIN EmployeeTraining ON TrainingProgram.TrainingProgramId = EmployeeTraining.TrainingProgramId " +
-                        $"JOIN Employee ON EmployeeTraining.EmployeeId = Employee.EmployeeId " +
+                        $"LEFT JOIN EmployeeTraining ON TrainingProgram.TrainingProgramId = EmployeeTraining.TrainingProgramId " +
+                        $"LEFT JOIN Employee ON EmployeeTraining.EmployeeId = Employee.EmployeeId " +
                         $"WHERE TrainingProgram.TrainingProgramId = {id}";
                 Dictionary<int, TrainingProgram> report = new Dictionary<int, TrainingProgram>();
                 var SingleTrainingProgram = (await conn.QueryAsync<TrainingProgram, Employee, TrainingProgram>(
@@ -107,10 +107,29 @@ namespace BangazonAPI.Controllers
                     )).Single();
                 return Ok(report.Values);
             }
-
         }
 
+        // POST /trainingprogram
+        [HttpPost]
+        public async Task<IActionResult> Post([FromBody] TrainingProgram value)
+        {
+            string sql = $@"INSERT INTO TrainingProgram
+            (ProgramName, StartDate, EndDate, MaximumAttendees)
+            VALUES
+            ('{value.ProgramName}'
+            ,'{value.StartDate}'
+            ,'{value.EndDate}'
+            ,'{value.MaximumAttendees}');
+            select MAX(TrainingProgramId) from TrainingProgram";
 
+            using (IDbConnection conn = Connection)
+            {
+                var newTrainingProgramId = (await conn.QueryAsync<int>(sql)).Single();
+                value.TrainingProgramId = newTrainingProgramId;
+                return CreatedAtRoute("GetTrainingProgram", new { id = newTrainingProgramId }, value);
+            }
+
+        }
 
 
 
