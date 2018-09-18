@@ -106,7 +106,20 @@ Use the command ```dotnet run``` to start the program, BangazonAPI. Once the pro
 ```
 
 - select `GET` then paste `http://localhost:5000/department?_include=employee` into the field and click send. The result should be an array of all the department in the database with all of the products included in that department as well.
-
+```
+[            
+{
+ "employeeId": 1,
+ "firstName": "William",
+ "lastName": "Kimball",
+ "email": "wkkimball043@gmail.com",
+ "supervisor": true,
+ "departmentId": 1,
+ "department": null,
+ "computer": null
+}
+]
+```
  To GET a specific, single Department, add an /{id} to the end of the ```localhost:5000/department``` URL. The result should only include the single department with the Id you added like the below:  
 ```
 [
