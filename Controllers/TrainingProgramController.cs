@@ -128,9 +128,55 @@ namespace BangazonAPI.Controllers
                 value.TrainingProgramId = newTrainingProgramId;
                 return CreatedAtRoute("GetTrainingProgram", new { id = newTrainingProgramId }, value);
             }
-
         }
 
+        // PUT trainingprogram/5
+        [HttpPut("{id}")]
+        //arguments: order specifies the order to be updated. This takes the form of a json object with the value in this format: { "CustomerId":"1", "CustomerPaymentId":"2"}
+        public async Task<IActionResult> Put([FromRoute] int id, [FromBody] TrainingProgram value)
+        {
+            string sql = $@"
+            UPDATE TrainingProgram
+            SET 
+            ProgramName = '{value.ProgramName}'
+            StartDate = '{value.StartDate}'
+            EndDate = '{value.EndDate}'
+            MaximumAttendees ='{value.MaximumAttendees}'
+            WHERE TrainingProgramId = {id}";
+
+            try
+            {
+                using (IDbConnection conn = Connection)
+                {
+                    int rowsAffected = await conn.ExecuteAsync(sql);
+                    if (rowsAffected > 0)
+                    {
+                        return new StatusCodeResult(StatusCodes.Status204NoContent);
+                    }
+                    throw new Exception("No rows affected");
+                }
+            }
+            catch (Exception)
+            {
+                if (!TrainingProgramExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+        }
+        //i think put is done... need to test
+        private bool TrainingProgramExists(int id)
+        {
+            string sql = $"SELECT TrainingProgramId FROM TrainingProgram WHERE TrainingProgramId = {id}";
+            using (IDbConnection conn = Connection)
+            {
+                return conn.Query<PaymentType>(sql).Count() > 0;
+            }
+        }
 
 
 
