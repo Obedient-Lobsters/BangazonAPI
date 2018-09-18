@@ -39,8 +39,7 @@ namespace BangazonAPI.Controllers
         }
 
 
-        //Get all and Get single methods displayed
-
+        //Get all method that allows user to get all product data back
         // GET All Products
         [HttpGet]
         public async Task<IActionResult> Get()
@@ -53,6 +52,7 @@ namespace BangazonAPI.Controllers
             }
         }
 
+        //Get a single product back
         //GET /Product/3
         [HttpGet("{id}", Name = "GetProduct")]
         public async Task<IActionResult> Get([FromRoute]int id)
@@ -69,7 +69,7 @@ namespace BangazonAPI.Controllers
 
         }
 
-        //This method will demonstrate the POST command
+        //This method demonstrates the POST command (post new products to database) 
         // POST Product/Post
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] Product product)
@@ -89,7 +89,7 @@ namespace BangazonAPI.Controllers
             }
         }
 
-        //This method will demostrate the Put function
+        //This method demostrates the Put function (allows user to update products already in the database)
         // PUT Product/put
         [HttpPut("{id}")]
         public async Task<IActionResult> Put([FromRoute] int id, [FromBody] Product product)
@@ -142,7 +142,7 @@ namespace BangazonAPI.Controllers
             }
         }
 
-        //Delete method demonstrated
+        //Delete method that lets user delete single items from the Product table
         // DELETE Product/2
         [HttpDelete("{id}")]
         public async Task<IActionResult> Delete([FromRoute] int id)
