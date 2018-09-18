@@ -38,10 +38,10 @@ namespace BangazonAPI.Controllers
             {
                 string sql = "Select * FROM Department";
 
-                if (_include != null && _include.Contains("employees"))
+                if (_include != null && _include.Contains("employee"))
                 {
 
-                    sql = $" Select * FROM Department JOIN Employees ON Department.Employees = Employee.EmployeeId";
+                    sql = $" Select * FROM Department JOIN Employee ON Department.DepartmentId = Employee.DepartmentId";
                     Dictionary<int, Department> report = new Dictionary<int, Department>();
                     var fullDep = await conn.QueryAsync<Department, Employee, Department>(
                     sql, (department, employee) =>
@@ -56,7 +56,7 @@ namespace BangazonAPI.Controllers
                         // Add the product to the current Product entry in Dictionary
                         report[department.DepartmentId].Employees.Add(employee);
                         return department;
-                    }, splitOn: "DepartmentId"
+                    }, splitOn: "DepartmentId, EmployeeId"
                         );
                     return Ok(report.Values);
                 }
