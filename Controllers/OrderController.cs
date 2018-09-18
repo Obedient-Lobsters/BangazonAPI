@@ -109,11 +109,24 @@ namespace BangazonAPI.Controllers
         {
             using (IDbConnection conn = Connection)
             {
-                string sql = $"SELECT * FROM [Order] WHERE OrderId = {id}";
+                string sql = $" Select * FROM [Order] JOIN ProductOrder ON [Order].OrderId = ProductOrder.OrderId JOIN Product ON ProductOrder.ProductId = Product.ProductId WHERE [Order].OrderId = {id}";
+                Dictionary<int, Order> report = new Dictionary<int, Order>();
+                var SingOrder = (await conn.QueryAsync<Order, Product, Order>(
+                sql, (order, product) =>
+                {
+                        // Does the Dictionary already have the key of the OrderId?
+                        if (!report.ContainsKey(order.OrderId))
+                    {
+                            // Create the entry in the dictionary
+                            report[order.OrderId] = order;
+                    }
 
-                var theSingleOrder = (await conn.QueryAsync<Order>(
-                    sql)).Single();
-                return Ok(theSingleOrder);
+                        // Add the product to the current Product entry in Dictionary
+                        report[order.OrderId].Product.Add(product);
+                    return order;
+                }, splitOn: "OrderId"
+                    )).Single();
+                return Ok(report.Values);
             }
 
         }
