@@ -111,7 +111,7 @@ namespace BangazonAPI.Controllers
             {
                 string sql = $" Select * FROM [Order] JOIN ProductOrder ON [Order].OrderId = ProductOrder.OrderId JOIN Product ON ProductOrder.ProductId = Product.ProductId WHERE [Order].OrderId = {id}";
                 Dictionary<int, Order> report = new Dictionary<int, Order>();
-                var SingOrder = await conn.QueryAsync<Order, Product, Order>(
+                var SingOrder = (await conn.QueryAsync<Order, Product, Order>(
                 sql, (order, product) =>
                 {
                         // Does the Dictionary already have the key of the OrderId?
@@ -125,7 +125,7 @@ namespace BangazonAPI.Controllers
                         report[order.OrderId].Product.Add(product);
                     return order;
                 }, splitOn: "OrderId"
-                    );
+                    )).Single();
                 return Ok(report.Values);
             }
 
