@@ -174,6 +174,32 @@ namespace BangazonAPI.Controllers
                 }
             }
         }
+
+        // DELETE trainingprogram/Delete
+        //This DELETE method will delete an existing entity for TrainingProgram by ID
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] int id)
+        {
+            //Checking to see if the Training Program can be deleted by adding an additional "WHERE" to our sql statement to filter out dates that were today or in the past
+            DateTime current = DateTime.Today;
+
+            string sql = $@"DELETE FROM TrainingProgram 
+                            WHERE TrainingProgramId = {id}
+                            WHERE TrainingProgram.startDate > '{current}'";
+            
+            using (IDbConnection conn = Connection)
+            {
+                int rowsAffected = await conn.ExecuteAsync(sql);
+                if (rowsAffected > 0)
+                {
+                    return new StatusCodeResult(StatusCodes.Status204NoContent);
+                }
+                throw new Exception("No rows affected");
+            }
+        }
+
+
+
         private bool TrainingProgramExists(int id)
         {
             string sql = $"SELECT TrainingProgramId FROM TrainingProgram WHERE TrainingProgramId = {id}";
