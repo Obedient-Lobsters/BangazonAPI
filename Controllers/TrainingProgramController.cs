@@ -39,9 +39,11 @@ namespace BangazonAPI.Controllers
         }
 
         //   GET /TrainingProgram?_include=employees
+        //   GET /TrainingProgram?completed=false
         [HttpGet]
         public async Task<IActionResult> Get(string _include, string completed)
         {
+
             using (IDbConnection conn = Connection)
             {
 
@@ -52,27 +54,31 @@ namespace BangazonAPI.Controllers
                     sql = $"Select * FROM TrainingProgram " +
                         $"LEFT JOIN EmployeeTraining ON TrainingProgram.TrainingProgramId = EmployeeTraining.TrainingProgramId " +
                         $"LEFT JOIN Employee ON EmployeeTraining.EmployeeId = Employee.EmployeeId ";
-                   
-
 
                     Dictionary<int, TrainingProgram> report = new Dictionary<int, TrainingProgram>();
                     var fullTrainingProgram = await conn.QueryAsync<TrainingProgram, Employee, TrainingProgram>(
-                    sql, (TrainingProgram, employee) =>
+                    sql, (trainingProgram, employee) =>
                     {
                         // Does the Dictionary already have the key of the Employee?
-                        if (!report.ContainsKey(TrainingProgram.TrainingProgramId))
+                        if (!report.ContainsKey(trainingProgram.TrainingProgramId))
                         {
                             // Create the entry in the dictionary
-                            report[TrainingProgram.TrainingProgramId] = TrainingProgram;
+                            report[trainingProgram.TrainingProgramId] = trainingProgram;
                         }
 
                         // Add the Employees to the current TrainingProgram entry in Dictionary
-                        report[TrainingProgram.TrainingProgramId].Employees.Add(employee);
-                        return TrainingProgram;
+                        report[trainingProgram.TrainingProgramId].Employees.Add(employee);
+                        return trainingProgram;
                     }, splitOn: "TrainingProgramId"
                         );
                     return Ok(report.Values);
                 }
+                //Checking to see if the Training Program is completed by adding an additional "WHERE" to our sql statement to filter out dates that were in the past from today
+                if (completed == "false")
+                {
+                    DateTime current = DateTime.Today;
+                    sql += $" WHERE TrainingProgram.endDate >= '{current}'";
+                }   
                 var trainingPrograms = await conn.QueryAsync<TrainingProgram>(sql);
                 return Ok(trainingPrograms);
             }
