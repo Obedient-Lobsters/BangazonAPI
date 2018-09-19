@@ -25,7 +25,7 @@ then replace ```INSERT_DATABASE_NAME``` with the name of your database that you'
 ### 1. Customer
 Start the program by cd'ing into the BangazonAPI and using the command `dotnet run`. Once the program is running, open up the Postman desktop app and run the following commands:
 
-#### GET
+##### GET
 - select `GET` then paste` localhost:5000/customer` into the field and click send. The result should be an array of all the orders in the database.
 
 - select `GET` then paste `http://localhost:5000/customer?_include=payments` into the field and click send. The result should be an array of all the customers in the database with all of the payment types included in that customers as well.
@@ -36,7 +36,7 @@ Start the program by cd'ing into the BangazonAPI and using the command `dotnet r
 
 - select ```GET``` then paste ```localhost:5000/customer/1``` or any other number that showed up in the previous query as CustomerId and click send. The result should be only that object of the specified Customer
 
-#### POST
+##### POST
 select ```POST```, then paste ```localhost:5000/customer``` into the field, then click Body underneath the field, then select raw, and then paste this snippet or make one similar 
 ```
 {
@@ -52,7 +52,7 @@ select ```POST```, then paste ```localhost:5000/customer``` into the field, then
 ```
 then click send. The result should be the new customer you made.
 
-#### PUT
+##### PUT
 select `PUT ` then paste` localhost:5000/customer/1` or any other `Customer Id `, then click Body underneath the field, then select raw, and then paste this snippet or make one similar 
 ```
     {
@@ -68,7 +68,7 @@ select `PUT ` then paste` localhost:5000/customer/1` or any other `Customer Id `
 ```
 You should get nothing back from this. When you run the `GET` query the Customer you specified in your `PUT` query should show the updated, edited information you gave it.
 
-#### 2. Product 
+### 2. Product 
 Use the command dotnet run to start the program, BangazonAPI. Once the program is running, open up the Postman desktop app and run the following commands for each request method:
 
 ##### GET
@@ -114,7 +114,7 @@ To GET a specific, single product, add an /{id} to the end of the localhost:5000
   }
 ]
 ```
-### POST
+##### POST
 To POST a new object to your existing array for Product, select POST, then paste localhost:5000/Product into the field. Then click Body underneath the field, select raw, and then paste this below snippet or make one similar then click send. The result should be the new Product you made:
 ```
  {
@@ -126,7 +126,7 @@ To POST a new object to your existing array for Product, select POST, then paste
 "productTypeId": 8
   }
   ```
-### PUT
+##### PUT
 To update an existing product, select PUT then paste localhost:5000/Product/6 or any other existing ProductId. Then follow the same directions as the POST example, and change the values then click send:
 ```
   {
@@ -140,7 +140,7 @@ To update an existing product, select PUT then paste localhost:5000/Product/6 or
 ```
 You should get nothing back from this besides an OK status. When you run the GET query the computer you specified in your PUT query should show the updated, edited information you gave it.
 
-### DELETE
+##### DELETE
 To DELETE an existing product, select DELETE then paste localhost:5000/Product/6 or any other existing ProductId then click send. You should get nothing back from this besides an OK status. When you run the GET query the product with the Id you specified in your DELETE query should no longer exist.
 
 ### 3. PaymentType
