@@ -40,6 +40,9 @@ namespace BangazonAPI.Controllers
 
         //   GET /TrainingProgram?_include=employees
         //   GET /TrainingProgram?completed=false
+        //This GET method will retrieve the information from the database for TrainingProgram
+        //You can also include employees in the retrieval if you want to see which ones are signed up for the training programs
+        //You can also filter by which training programs have been completed
         [HttpGet]
         public async Task<IActionResult> Get(string _include, string completed)
         {
@@ -85,6 +88,7 @@ namespace BangazonAPI.Controllers
         }
 
         // GET trainingprogram/2
+        //This GET method will retrieve the information from the database for a singular ID of TrainingProgram
         [HttpGet("{id}", Name = "GetTrainingProgram")]
         //arguments: id specifies which trainingProgram to get
         public async Task<IActionResult> Get([FromRoute] int id)
@@ -116,6 +120,7 @@ namespace BangazonAPI.Controllers
         }
 
         // POST /trainingprogram
+        //This POST method will create a new entity for TrainingProgram
         [HttpPost]
         public async Task<IActionResult> Post([FromBody] TrainingProgram value)
         {
@@ -137,8 +142,9 @@ namespace BangazonAPI.Controllers
         }
 
         // PUT trainingprogram/5
+        //This PUT method will edit an existing entity for TrainingProgram by ID
+
         [HttpPut("{id}")]
-        //arguments: order specifies the order to be updated. This takes the form of a json object with the value in this format: { "CustomerId":"1", "CustomerPaymentId":"2"}
         public async Task<IActionResult> Put([FromRoute] int id, [FromBody] TrainingProgram value)
         {
             string sql = $@"
@@ -200,7 +206,7 @@ DELETE FROM EmployeeTraining WHERE TrainingProgramId = {id}";
                 throw new Exception("No rows affected");
             }
         }
-
+        //Checks to see if Training program exists
         private bool TrainingProgramExists(int id)
         {
             string sql = $"SELECT TrainingProgramId FROM TrainingProgram WHERE TrainingProgramId = {id}";
