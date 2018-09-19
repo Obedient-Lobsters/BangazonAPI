@@ -183,10 +183,13 @@ namespace BangazonAPI.Controllers
             //Checking to see if the Training Program can be deleted by adding an additional "WHERE" to our sql statement to filter out dates that were today or in the past
             DateTime current = DateTime.Today;
 
-            string sql = $@"DELETE FROM TrainingProgram 
-                            WHERE TrainingProgramId = {id}
-                            WHERE TrainingProgram.startDate > '{current}'";
-            
+            string sql = $@"IF (OBJECT_ID('dbo.FK_TrainingProgram', 'F') IS NOT NULL)
+BEGIN ALTER TABLE dbo.EmployeeTraining DROP CONSTRAINT FK_TrainingProgram
+END 
+DELETE FROM TrainingProgram WHERE TrainingProgram.StartDate > '{current}'
+AND TrainingProgramId = {id}
+DELETE FROM EmployeeTraining WHERE TrainingProgramId = {id}";
+
             using (IDbConnection conn = Connection)
             {
                 int rowsAffected = await conn.ExecuteAsync(sql);
@@ -197,8 +200,6 @@ namespace BangazonAPI.Controllers
                 throw new Exception("No rows affected");
             }
         }
-
-
 
         private bool TrainingProgramExists(int id)
         {
