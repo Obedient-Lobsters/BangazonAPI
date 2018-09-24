@@ -25,6 +25,6 @@ namespace BangazonAPI.Models
         [Required]
         public int MaximumAttendees { get; set; }
 
-        public IEnumerable<Employee> Employee;
+        public List<Employee> Employees { get; set; } = new List<Employee>();
     }
 }

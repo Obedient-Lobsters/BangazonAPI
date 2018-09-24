@@ -1,5 +1,6 @@
 ﻿//Author: Leah Gwin
 //Purpose: Controller for ProductType table
+//Methods: GET, POST, PUT, DELETE
 
 using System;
 using System.Collections.Generic;
