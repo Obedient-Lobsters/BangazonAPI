@@ -36,12 +36,13 @@ namespace BangazonAPI.Controllers
         {
             using (IDbConnection conn = Connection)
             {
-                string sql = "Select * FROM Department";
+                string sql = "Select DepartmentId, DepartmentName, ExpenseBudget FROM Department";
 
                 if (_include != null && _include.Contains("employee"))
                 {
 
-                    sql = $" Select * FROM Department JOIN Employee ON Department.DepartmentId = Employee.DepartmentId";
+                    sql = $" Select DepartmentId, DepartmentName, ExpenseBudget FROM Department JOIN Employee ON Department.DepartmentId = Employee.DepartmentId";
+
                     Dictionary<int, Department> report = new Dictionary<int, Department>();
                     var fullDep = await conn.QueryAsync<Department, Employee, Department>(
                     sql, (department, employee) =>
@@ -63,7 +64,7 @@ namespace BangazonAPI.Controllers
 
                 if (_gt > 1)
                 {
-                    sql = $@"SELECT * FROM Department WHERE ExpenseBudget >= {_gt}";
+                    sql = $@"SELECT DepartmentId, DepartmentName, ExpenseBudget FROM Department WHERE ExpenseBudget >= {_gt}";
                     var budgetDep = await conn.QueryAsync<Department>(
                         sql);
                     return Ok(budgetDep);
@@ -78,7 +79,7 @@ namespace BangazonAPI.Controllers
         {
             using (IDbConnection conn = Connection)
             {
-                string sql = $"SELECT * FROM Department WHERE DepartmentId = {id}";
+                string sql = $"SELECT DepartmentId, DepartmentName, ExpenseBudget FROM Department WHERE DepartmentId = {id}";
 
                 var theSingleOrder = (await conn.QueryAsync<Department>(
                     sql)).Single();

@@ -171,6 +171,7 @@ Use the command ```dotnet run``` to start the program, BangazonAPI. Once the pro
 }
 ```
 You should get nothing back from this besides an OK status. When you run the GET query the Order you specified in your PUT query should show the updated, edited information you gave it.
+
  ##### DELETE
 
  To DELETE an existing Order, select DELETE then paste ```localhost:5000/order/2``` or any other existing Order then click send. You should get nothing back from this besides an OK status. When you run the GET query the order with the Id you specified in your DELETE query should no longer exist.
@@ -246,11 +247,11 @@ Use the command ```dotnet run``` to start the program, BangazonAPI. Once the pro
 ```
 You should get nothing back from this besides an OK status. When you run the GET query the Department you specified in your PUT query should show the updated, edited information you gave it.
  ##### DELETE
+
  To DELETE an existing Department, select DELETE then paste ```localhost:5000/department/2``` or any other existing Department then click send. You should get nothing back from this besides an OK status. When you run the GET query the order with the Id you specified in your DELETE query should no longer exist.
 
 ###Employees
 http methods supported: GET, POST, PUT example body:
-
 
  To DELETE an existing product type, select DELETE then paste ```localhost:5000/order/2``` or any other existing Order then click send. You should get nothing back from this besides an OK status. When you run the GET query the order with the Id you specified in your DELETE query should no longer exist.
 
